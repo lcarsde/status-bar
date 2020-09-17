@@ -113,10 +113,10 @@ class WidgetConfiguration:
 
 
 def get_configuration_path():
-    path = "{0}/.config/lcarswm/status-config.xml".format(os.environ.get('HOME'))
+    path = "{0}/.config/lcarsde/status-config.xml".format(os.environ.get('HOME'))
     if not os.path.isfile(path):
         print("no local config -> falling back to global config")
-        path = "/etc/lcarswm/status-config.xml"
+        path = "/etc/lcarsde/status-config.xml"
     return path
 
 
