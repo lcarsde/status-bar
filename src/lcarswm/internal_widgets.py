@@ -376,9 +376,9 @@ class LcarswmStatusAudio(LcarswmStatusWidget):
         self.drawing_area.queue_draw()
         if new_mute:
             self.mute_audio_button.get_style_context().add_class("button--c66")
-            self.mute_audio_button.get_style_context().remove_class("button--99c")
+            self.mute_audio_button.get_style_context().remove_class("button--99f")
         else:
-            self.mute_audio_button.get_style_context().add_class("button--99c")
+            self.mute_audio_button.get_style_context().add_class("button--99f")
             self.mute_audio_button.get_style_context().remove_class("button--c66")
 
     def update_volume(self, new_volume):
