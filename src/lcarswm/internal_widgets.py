@@ -500,6 +500,69 @@ class LcarswmBatteryStatus(LcarswmStatusWidget):
         self.drawing_area.queue_draw()
 
 
+class LcarswmWifiStatus(LcarswmStatusWidget):
+    """
+    This widget displays the status of the configured battery.
+
+    The battery can be set with key "device" in the status-config.xml.
+
+    preferred: width 1, height 1
+    """
+
+    def __init__(self, width, height, css_provider, properties):
+        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+
+        self.drawing_area = Gtk.DrawingArea()
+        self.drawing_area.set_size_request(width, height)
+        self.drawing_area.connect('draw', self.draw_status)
+        self.add(self.drawing_area)
+
+        self.update()
+
+    def draw_status(self, widget, context):
+        status = self.read_wifi_status()
+
+        self.draw_antenna(context, status)
+        self.draw_wifi_status(context, status)
+
+    def read_wifi_status(self):
+        # status -> "Unavailable", "Down", "Up"
+
+        path = '/sys/class/net'
+        device_path = os.path.join(path, self.properties["device"])
+
+        if os.path.isdir(device_path):
+            status = read_file(os.path.join(device_path, 'operstate'))
+            if status == 'up':
+                return 'Up'
+            else:
+                return 'Down'
+        else:
+            return 'Unavailable'
+
+    def draw_antenna(self, context, status):
+        if status == 'Unavailable':
+            context.set_source_rgba(0.8, 0.4, 0.4)
+        elif status == 'Down':
+            context.set_source_rgb(0.6, 0.6, 0.8)
+        else:
+            context.set_source_rgb(1.0, 0.8, 0.6)
+
+        context.rectangle(18, 16, 2, 24)
+        context.arc(19, 16, 4, 0, 2*math.pi)
+        context.fill()
+
+    def draw_wifi_status(self, context, status):
+        if status == 'Unavailable':
+            context.set_source_rgba(1.0, 0.6, 0.4, 0.6)
+        else:
+            context.set_source_rgba(1.0, 0.8, 0.6, 0.6)
+
+    def update(self):
+        # read the updated time
+        self.drawing_area.queue_draw()
+
+
 class LcarswmStatusButton(LcarswmStatusWidget):
     """
     This widget is used show a button for executing commands.
