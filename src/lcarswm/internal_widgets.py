@@ -548,34 +548,34 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
         else:
             context.set_source_rgb(1.0, 0.8, 0.6)
 
-        context.rectangle(19, 16, 2, 24)
-        context.arc(20, 16, 4, 0, 2*math.pi)
+        context.rectangle(19, 14, 2, 25)
+        context.arc(20, 14, 4, 0, 2*math.pi)
         context.fill()
 
     def draw_wifi_status(self, context, status):
         if status == 'Unavailable':
             context.set_source_rgba(1.0, 0.6, 0.4, 0.6)
 
-            context.move_to(13, 40)
-            context.line_to(27, 16)
+            context.move_to(13, 39)
+            context.line_to(27, 14)
             context.stroke()
         else:
             context.set_source_rgba(1.0, 0.8, 0.6, 0.6)
 
             # left side
-            context.arc(20, 16, 7, .6*math.pi, 1.4*math.pi)
+            context.arc(20, 14, 7, .6*math.pi, 1.4*math.pi)
             context.stroke()
-            context.arc(20, 16, 10, .6*math.pi, 1.4*math.pi)
+            context.arc(20, 14, 10, .6*math.pi, 1.4*math.pi)
             context.stroke()
-            context.arc(20, 16, 13, .6*math.pi, 1.4*math.pi)
+            context.arc(20, 14, 13, .6*math.pi, 1.4*math.pi)
             context.stroke()
 
             # right side
-            context.arc(20, 16, 7, 1.6*math.pi, .4*math.pi)
+            context.arc(20, 14, 7, 1.6*math.pi, .4*math.pi)
             context.stroke()
-            context.arc(20, 16, 10, 1.6*math.pi, .4*math.pi)
+            context.arc(20, 14, 10, 1.6*math.pi, .4*math.pi)
             context.stroke()
-            context.arc(20, 16, 13, 1.6*math.pi, .4*math.pi)
+            context.arc(20, 14, 13, 1.6*math.pi, .4*math.pi)
             context.stroke()
 
     def update(self):
