@@ -559,7 +559,7 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
             context.move_to(13, 39)
             context.line_to(27, 14)
             context.stroke()
-        else:
+        elif status == 'Up':
             context.set_source_rgba(1.0, 0.8, 0.6, 0.6)
 
             # left side
