@@ -583,6 +583,95 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
         self.drawing_area.queue_draw()
 
 
+class LcarswmEthStatus(LcarswmStatusWidget):
+    """
+    This widget displays the status of the configured battery.
+
+    The battery can be set with key "device" in the status-config.xml.
+
+    preferred: width 1, height 1
+    """
+
+    def __init__(self, width, height, css_provider, properties):
+        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+
+        self.drawing_area = Gtk.DrawingArea()
+        self.drawing_area.set_size_request(width, height)
+        self.drawing_area.connect('draw', self.draw_status)
+        self.add(self.drawing_area)
+
+        self.update()
+
+    def draw_status(self, widget, context):
+        status = self.read_eth_status()
+
+        self.draw_connector(context, status)
+        self.draw_eth_status(context, status)
+
+    def read_eth_status(self):
+        # status -> "Unavailable", "Down", "Up"
+
+        path = '/sys/class/net'
+        device_path = os.path.join(path, self.properties["device"])
+
+        if os.path.isdir(device_path):
+            status = read_file(os.path.join(device_path, 'operstate'))
+            if status == 'up':
+                return 'Up'
+            else:
+                return 'Down'
+        else:
+            return 'Unavailable'
+
+    def draw_connector(self, context, status):
+        if status == 'Unavailable':
+            context.set_source_rgba(0.8, 0.4, 0.4)
+        elif status == 'Down':
+            context.set_source_rgb(0.6, 0.6, 0.8)
+        else:  # Up
+            context.set_source_rgb(1.0, 0.8, 0.6)
+
+        # Cable
+        context.rectangle(0, 35, 40, 2)
+        if status == 'Up' or status == 'Unavailable':
+            context.rectangle(19, 21, 2, 12)
+            context.arc(20, 36, 4, 0, 2*math.pi)
+        else:  # Down
+            context.rectangle(19, 21, 2, 5)
+
+        # Adapter
+        context.rectangle(13, 20, 14, 2)
+        context.rectangle(13, 3, 14, 2)
+        context.rectangle(13, 3, 2, 18)
+        context.rectangle(25, 3, 2, 18)
+        context.rectangle(16.5, 3, 1, 8)
+        context.rectangle(18.5, 3, 1, 8)
+        context.rectangle(20.5, 3, 1, 8)
+        context.rectangle(22.5, 3, 1, 8)
+        context.rectangle(18, 0, 4, 2)
+        context.rectangle(17, 0, 2, 4)
+        context.rectangle(21, 0, 2, 4)
+        context.fill()
+
+    def draw_eth_status(self, context, status):
+        if status == 'Unavailable':
+            context.set_source_rgba(1.0, 0.6, 0.4, 0.5)
+
+            context.move_to(8, 30)
+            context.line_to(32, 2)
+            context.stroke()
+        elif status == 'Up':
+            context.set_source_rgba(1.0, 0.8, 0.6, 0.5)
+
+        context.rectangle(15, 5, 10, 16)
+        context.rectangle(19, 2, 2, 1)
+        context.fill()
+
+    def update(self):
+        # read the updated time
+        self.drawing_area.queue_draw()
+
+
 class LcarswmStatusButton(LcarswmStatusWidget):
     """
     This widget is used show a button for executing commands.

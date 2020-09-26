@@ -9,7 +9,7 @@ import os.path
 
 import gi
 gi.require_version("Gtk", "3.0")
-from gi.repository import GdkX11, Gdk, Gtk, GLib
+from gi.repository import GdkX11, Gtk, GLib
 
 css = b'''
 * {
