@@ -507,6 +507,8 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
     The battery can be set with key "device" in the status-config.xml.
 
     preferred: width 1, height 1
+
+    TODO use /proc/dev/wireless to get signal quality
     """
 
     def __init__(self, width, height, css_provider, properties):
