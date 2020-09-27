@@ -554,7 +554,7 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
 
     def draw_wifi_status(self, context, status):
         if status == 'Unavailable':
-            context.set_source_rgba(1.0, 0.6, 0.4, 0.6)
+            context.set_source_rgb(0.8, 0.4, 0.4)
 
             context.move_to(13, 39)
             context.line_to(27, 14)
@@ -655,7 +655,7 @@ class LcarswmEthStatus(LcarswmStatusWidget):
 
     def draw_eth_status(self, context, status):
         if status == 'Unavailable':
-            context.set_source_rgba(1.0, 0.6, 0.4, 0.5)
+            context.set_source_rgb(0.8, 0.4, 0.4)
 
             context.move_to(8, 30)
             context.line_to(32, 2)
@@ -663,9 +663,9 @@ class LcarswmEthStatus(LcarswmStatusWidget):
         elif status == 'Up':
             context.set_source_rgba(1.0, 0.8, 0.6, 0.5)
 
-        context.rectangle(15, 5, 10, 16)
-        context.rectangle(19, 2, 2, 1)
-        context.fill()
+            context.rectangle(15, 5, 10, 16)
+            context.rectangle(19, 2, 2, 1)
+            context.fill()
 
     def update(self):
         # read the updated time
