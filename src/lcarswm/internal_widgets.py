@@ -23,6 +23,13 @@ def read_file(file_path):
     return data
 
 
+def sort_dict_by_key(data):
+    new_dict = {}
+    for key in sorted(data.keys()):
+        new_dict[key] = data[key]
+    return new_dict
+
+
 class LcarswmStatusText(LcarswmStatusWidget):
     """
     LcarswmStatusText is an abstract class that acts as a frame for widgets
@@ -61,6 +68,72 @@ class LcarswmStatusText(LcarswmStatusWidget):
     def update(self):
         # update the text
         self.drawing_area.queue_draw()
+
+
+class LcarswmStatusRadarGraph(LcarswmStatusWidget):
+    """
+    This widget is an abstract widget for drawing data into a radar graph.
+
+    preferred: width 3, height 3
+    """
+
+    def __init__(self, width, height, css_provider, properties, max_scale):
+        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+
+        self.cx = width / 2
+        self.cy = height / 2
+        self.max_scale = max_scale
+        self.min_dimension = min(self.cx, self.cy)
+        self.scale = self.min_dimension / self.max_scale
+
+        self.drawing_area = Gtk.DrawingArea()
+        self.drawing_area.set_size_request(width, height)
+        self.drawing_area.connect('draw', self.draw_graph)
+        self.add(self.drawing_area)
+
+        self.update()
+
+    def draw_graph(self, widget, context):
+        self.draw_radar_cross(context)
+        self.draw_data(context)
+
+    def draw_radar_cross(self, context):
+        context.set_source_rgb(0.6, 0.6, 0.8)
+
+        context.move_to(0, self.cy)
+        context.line_to(self.width, self.cy)
+        context.move_to(self.cx, 0)
+        context.line_to(self.cx, self.height)
+        v1, v2 = self.polar_to_cartesian(self.min_dimension, 135)
+        (mi, ma) = (v1, v2) if v1 < v2 else (v2, v1)
+        context.move_to(mi, mi)
+        context.line_to(ma, ma)
+        context.move_to(mi, ma)
+        context.line_to(ma, mi)
+        context.stroke()
+
+        scaled_max = self.max_scale * self.scale
+        context.arc(self.cx, self.cy, .8 * scaled_max, 0.0, 2.0 * math.pi)
+        context.stroke()
+        context.arc(self.cx, self.cy, .4 * scaled_max, 0.0, 2.0 * math.pi)
+        context.stroke()
+
+    def draw_data(self, context):
+        """
+        Use this, to draw data into the data graph.
+
+        :param context: the GTK drawing context
+        """
+        pass
+
+    def update(self):
+        # read the updated time
+        self.drawing_area.queue_draw()
+
+    def polar_to_cartesian(self, radius, angle):
+        x = radius * math.cos(math.radians(angle))
+        y = radius * math.sin(math.radians(angle))
+        return self.cx + x, self.cy + y
 
 
 class LcarswmStatusTime(LcarswmStatusText):
@@ -148,58 +221,23 @@ class LcarswmStatusStardate(LcarswmStatusText):
         return f"{star_date:.2f}"[:-1]
 
 
-class LcarswmStatusTemperature(LcarswmStatusWidget):
+class LcarswmStatusTemperature(LcarswmStatusRadarGraph):
     """
     This widget draws temperatures from thermal zones into a graph.
 
     preferred: width 3, height 3
     """
 
+    attention_temperature = 60
+    warning_temperature = 80
+
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
-
-        self.cx = width / 2
-        self.cy = height / 2
-        self.max_scale = 125
-        self.min_dimension = min(self.cx, self.cy)
-        self.scale = self.min_dimension / self.max_scale
-
-        self.attention_temperature = 60
-        self.warning_temperature = 80
-
-        self.drawing_area = Gtk.DrawingArea()
-        self.drawing_area.set_size_request(width, height)
-        self.drawing_area.connect('draw', self.draw_graph)
-        self.add(self.drawing_area)
+        LcarswmStatusRadarGraph.__init__(self, width, height, css_provider, properties, 125)
 
         self.update()
 
-    def draw_graph(self, widget, context):
-        self.draw_radar_cross(context)
-        self.draw_data(context)
-
-    def draw_radar_cross(self, context):
-        context.set_source_rgb(0.6, 0.6, 0.8)
-
-        context.move_to(0, self.cy)
-        context.line_to(self.width, self.cy)
-        context.move_to(self.cx, 0)
-        context.line_to(self.cx, self.height)
-        v1, v2 = self.polar_to_cartesian(self.min_dimension, 135)
-        (mi, ma) = (v1, v2) if v1 < v2 else (v2, v1)
-        context.move_to(mi, mi)
-        context.line_to(ma, ma)
-        context.move_to(mi, ma)
-        context.line_to(ma, mi)
-        context.stroke()
-
-        context.arc(self.cx, self.cy, 100 * self.scale, 0.0, 2.0 * math.pi)
-        context.stroke()
-        context.arc(self.cx, self.cy, 50 * self.scale, 0.0, 2.0 * math.pi)
-        context.stroke()
-
     def draw_data(self, context):
-        temperatures = LcarswmStatusTemperature.sort_dict(LcarswmStatusTemperature.get_temperatures()).values()
+        temperatures = sort_dict_by_key(LcarswmStatusTemperature.get_temperatures()).values()
 
         if not temperatures:
             # the system doesn't give us temperature sensors (maybe a virtual machine)
@@ -233,10 +271,6 @@ class LcarswmStatusTemperature(LcarswmStatusWidget):
         context.fill_preserve()
         context.stroke()
 
-    def update(self):
-        # read the updated time
-        self.drawing_area.queue_draw()
-
     @staticmethod
     def get_temperatures():
         # get every /sys/class/thermal/thermal_zone* directory
@@ -253,17 +287,76 @@ class LcarswmStatusTemperature(LcarswmStatusWidget):
                 temp_dict[name] = int(temp) / 1000
         return temp_dict
 
-    @staticmethod
-    def sort_dict(data):
-        new_dict = {}
-        for key in sorted(data.keys()):
-            new_dict[key] = data[key]
-        return new_dict
 
-    def polar_to_cartesian(self, radius, angle):
-        x = radius * math.cos(math.radians(angle))
-        y = radius * math.sin(math.radians(angle))
-        return self.cx + x, self.cy + y
+class LcarswmStatusCpuUsage(LcarswmStatusRadarGraph):
+    """
+    This widget draws temperatures from thermal zones into a graph.
+
+    preferred: width 3, height 3
+    """
+
+    attention_frequency = 60
+    warning_frequency = 80
+
+    def __init__(self, width, height, css_provider, properties):
+        LcarswmStatusRadarGraph.__init__(self, width, height, css_provider, properties, 100)
+        self.last_idles_totals = None
+
+        self.update()
+
+    def draw_data(self, context):
+        utilization = self.get_cpu_utilization()
+
+        angle = 0
+        points = []
+        max_temp = 0
+        for util in utilization:
+            point = (self.polar_to_cartesian(util * self.scale, angle))
+            points.append(point)
+            if util > max_temp:
+                max_temp = util
+            angle = angle + 360 / len(utilization)
+
+        context.set_source_rgb(1.0, 0.8, 0.6)
+        context.set_source_rgba(1.0, 0.8, 0.6, 0.6)
+        if max_temp > self.attention_frequency:
+            context.set_source_rgb(1.0, 0.6, 0.0)
+            context.set_source_rgba(1.0, 0.6, 0.0, 0.6)
+        if max_temp > self.warning_frequency:
+            context.set_source_rgb(0.8, 0.4, 0.4)
+            context.set_source_rgba(0.8, 0.4, 0.4, 0.6)
+
+        (x, y) = points[0]
+        context.move_to(x, y)
+        for i in range(1, len(points)):
+            (x, y) = points[i]
+            context.line_to(x, y)
+        context.close_path()
+        context.fill_preserve()
+        context.stroke()
+
+    def get_cpu_utilization(self):
+        # get every /proc/stat cpuN entry
+        # read all the values
+        # and compute the utilization
+        # https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
+        stat_data = read_file('/proc/stat').splitlines()
+        cpu_data = [list(map(float, d.strip().split()[1:]))
+                    for d in stat_data[1:]
+                    if d.startswith('cpu')]
+        idles_totals = [(d[3] + d[4], sum(d))
+                        for d in cpu_data]
+
+        if not self.last_idles_totals:
+            deltas = [(1, 1)] * len(idles_totals)
+        else:
+            deltas = [(current[0] - last[0], current[1] - last[1])
+                      for (current, last) in zip(idles_totals, self.last_idles_totals)]
+
+        self.last_idles_totals = idles_totals
+        utilization = [100 * (1.0 - idle / total)
+                       for (idle, total) in deltas]
+        return utilization
 
 
 class LcarswmStatusAudio(LcarswmStatusWidget):
@@ -272,6 +365,7 @@ class LcarswmStatusAudio(LcarswmStatusWidget):
 
     preferred: width 4, height 1
     """
+
     def __init__(self, width, height, css_provider, properties):
         LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
 
@@ -415,6 +509,7 @@ class LcarswmStatusAudio(LcarswmStatusWidget):
 class LcarswmNetworkStatus(LcarswmStatusWidget):
     """
     """
+
     def __init__(self, width, height, css_provider, properties):
         LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
         # /proc/net/wireless -> link
@@ -502,9 +597,9 @@ class LcarswmBatteryStatus(LcarswmStatusWidget):
 
 class LcarswmWifiStatus(LcarswmStatusWidget):
     """
-    This widget displays the status of the configured battery.
+    This widget displays the status of the configured wifi adapter.
 
-    The battery can be set with key "device" in the status-config.xml.
+    The wifi adapter can be set with key "device" in the status-config.xml.
 
     preferred: width 1, height 1
 
@@ -551,7 +646,7 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
             context.set_source_rgb(1.0, 0.8, 0.6)
 
         context.rectangle(19, 14, 2, 25)
-        context.arc(20, 14, 4, 0, 2*math.pi)
+        context.arc(20, 14, 4, 0, 2 * math.pi)
         context.fill()
 
     def draw_wifi_status(self, context, status):
@@ -565,19 +660,19 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
             context.set_source_rgba(1.0, 0.8, 0.6, 0.6)
 
             # left side
-            context.arc(20, 14, 7, .6*math.pi, 1.4*math.pi)
+            context.arc(20, 14, 7, .6 * math.pi, 1.4 * math.pi)
             context.stroke()
-            context.arc(20, 14, 10, .6*math.pi, 1.4*math.pi)
+            context.arc(20, 14, 10, .6 * math.pi, 1.4 * math.pi)
             context.stroke()
-            context.arc(20, 14, 13, .6*math.pi, 1.4*math.pi)
+            context.arc(20, 14, 13, .6 * math.pi, 1.4 * math.pi)
             context.stroke()
 
             # right side
-            context.arc(20, 14, 7, 1.6*math.pi, .4*math.pi)
+            context.arc(20, 14, 7, 1.6 * math.pi, .4 * math.pi)
             context.stroke()
-            context.arc(20, 14, 10, 1.6*math.pi, .4*math.pi)
+            context.arc(20, 14, 10, 1.6 * math.pi, .4 * math.pi)
             context.stroke()
-            context.arc(20, 14, 13, 1.6*math.pi, .4*math.pi)
+            context.arc(20, 14, 13, 1.6 * math.pi, .4 * math.pi)
             context.stroke()
 
     def update(self):
@@ -587,9 +682,9 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
 
 class LcarswmEthStatus(LcarswmStatusWidget):
     """
-    This widget displays the status of the configured battery.
+    This widget displays the status of the configured ethernet adapter.
 
-    The battery can be set with key "device" in the status-config.xml.
+    The ethernet adapter can be set with key "device" in the status-config.xml.
 
     preferred: width 1, height 1
     """
@@ -637,7 +732,7 @@ class LcarswmEthStatus(LcarswmStatusWidget):
         context.rectangle(0, 35, 40, 2)
         if status == 'Up' or status == 'Unavailable':
             context.rectangle(19, 21, 2, 12)
-            context.arc(20, 36, 4, 0, 2*math.pi)
+            context.arc(20, 36, 4, 0, 2 * math.pi)
         else:  # Down
             context.rectangle(19, 21, 2, 5)
 
