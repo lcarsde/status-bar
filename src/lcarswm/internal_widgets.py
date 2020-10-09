@@ -307,6 +307,10 @@ class LcarswmStatusCpuUsage(LcarswmStatusRadarGraph):
     def draw_data(self, context):
         utilization = self.get_cpu_utilization()
 
+        if not utilization:
+            # no change since last time
+            return
+
         angle = 0
         points = []
         max_temp = 0
@@ -336,10 +340,14 @@ class LcarswmStatusCpuUsage(LcarswmStatusRadarGraph):
         context.stroke()
 
     def get_cpu_utilization(self):
-        # get every /proc/stat cpuN entry
-        # read all the values
-        # and compute the utilization
-        # https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
+        """
+        get every /proc/stat cpuN entry
+        read all the values
+        and compute the utilization
+        https://stackoverflow.com/questions/23367857/accurate-calculation-of-cpu-usage-given-in-percentage-in-linux
+
+        :return: utilization for each CPU or None, if for some reason the values didn't change -> zero division
+        """
         stat_data = read_file('/proc/stat').splitlines()
         cpu_data = [list(map(float, d.strip().split()[1:]))
                     for d in stat_data[1:]
@@ -354,9 +362,13 @@ class LcarswmStatusCpuUsage(LcarswmStatusRadarGraph):
                       for (current, last) in zip(idles_totals, self.last_idles_totals)]
 
         self.last_idles_totals = idles_totals
-        utilization = [100 * (1.0 - idle / total)
-                       for (idle, total) in deltas]
-        return utilization
+        try:
+            utilization = [100 * (1.0 - idle / total)
+                           for (idle, total) in deltas]
+            return utilization
+        except ZeroDivisionError:
+            # values didn't change since last time
+            return None
 
 
 class LcarswmStatusAudio(LcarswmStatusWidget):
