@@ -8,6 +8,8 @@ import os
 import math
 from random import randint
 import importlib
+import subprocess
+from multiprocessing import Process
 
 import gi
 
@@ -816,7 +818,8 @@ class LcarswmStatusButton(LcarswmStatusWidget):
         self.button.get_style_context().add_provider(css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
     def on_click(self, widget):
-        os.system(self.properties["command"])
+        p = Process(target=lambda c: subprocess.Popen(c), args=(self.properties["command"],))
+        p.start()
 
 
 class LcarswmStatusFiller(LcarswmStatusWidget):
