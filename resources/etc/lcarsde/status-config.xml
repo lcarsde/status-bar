@@ -67,7 +67,7 @@
         <properties>
             <property key="text" value="Programs" />
             <property key="color" value="f90" />
-            <property key="command" value="lxterminal" />
+            <property key="command" value="lcarsde-application-starter.py" />
         </properties>
     </widget>
     <widget module="lcarswm.internal_widgets" name="LcarswmStatusButton">
