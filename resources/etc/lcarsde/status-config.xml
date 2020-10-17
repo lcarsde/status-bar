@@ -75,7 +75,7 @@
         <properties>
             <property key="text" value="Close" />
             <property key="color" value="c66" />
-            <property key="command" value="lxde-logout" />
+            <property key="command" value="lcarsde-logout.py" />
         </properties>
     </widget>
     <widget module="lcarswm.internal_widgets" name="LcarswmStatusTemperature">
