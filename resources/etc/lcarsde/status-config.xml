@@ -22,47 +22,47 @@
         </properties>
     </widget>-->
 
-    <widget module="lcarswm.internal_widgets" name="LcarswmStatusTime">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusTime">
         <position x="0" y="0" width="4" height="1" />
     </widget>
-    <widget module="lcarswm.internal_widgets" name="LcarswmStatusDate">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusDate">
         <position x="0" y="1" width="4" height="1" />
     </widget>
-    <widget module="lcarswm.internal_widgets" name="LcarswmStatusAudio">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusAudio">
         <position x="0" y="2" width="4" height="1" />
         <properties>
             <!-- Audio widget properties -->
-            <!-- Audio handler needs to be an instance of lcarswm.audio.AudioMixer -->
+            <!-- Audio handler needs to be an instance of lcarsde.audio.AudioMixer -->
             <!--<property key="handlerPackage" value="mypackage" />-->
-            <property key="handlerModule" value="lcarswm.audio" />
+            <property key="handlerModule" value="lcarsde.audio" />
             <property key="handler" value="AlsaAudioMixer" />
             <!-- Audio handler properties -->
             <property key="control" value="Master"/><!-- might be PCM -->
             <property key="stepSize" value="3" />
         </properties>
     </widget>
-    <widget module="lcarswm.internal_widgets" name="LcarswmBatteryStatus">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeBatteryStatus">
         <position x="4" y="0" width="1" height="1" />
         <properties>
             <!-- Device should correspond to a folder in /sys/class/power_supply that starts with "BAT" -->
             <property key="device" value="BAT0" />
         </properties>
     </widget>
-    <widget module="lcarswm.internal_widgets" name="LcarswmWifiStatus">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeWifiStatus">
         <position x="4" y="2" width="1" height="1" />
         <properties>
             <!-- Device should correspond to a folder in /sys/class/net that starts with "BAT" -->
             <property key="device" value="wlp2s0" />
         </properties>
     </widget>
-    <widget module="lcarswm.internal_widgets" name="LcarswmEthStatus">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeEthStatus">
         <position x="4" y="1" width="1" height="1" />
         <properties>
             <!-- Device should correspond to a folder in /sys/class/net that starts with "BAT" -->
             <property key="device" value="enp0s20f0u2u3i5" />
         </properties>
     </widget>
-    <widget module="lcarswm.internal_widgets" name="LcarswmStatusButton">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusButton">
         <position x="5" y="0" width="3" height="1" />
         <properties>
             <property key="text" value="Programs" />
@@ -70,7 +70,7 @@
             <property key="command" value="lcarsde-application-starter.py" />
         </properties>
     </widget>
-    <widget module="lcarswm.internal_widgets" name="LcarswmStatusButton">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusButton">
         <position x="5" y="2" width="3" height="1" />
         <properties>
             <property key="text" value="Close" />
@@ -78,10 +78,10 @@
             <property key="command" value="lcarsde-logout.py" />
         </properties>
     </widget>
-    <widget module="lcarswm.internal_widgets" name="LcarswmStatusTemperature">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusTemperature">
         <position x="8" y="0" width="3" height="3" />
     </widget>
-    <widget module="lcarswm.internal_widgets" name="LcarswmStatusCpuUsage">
+    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusCpuUsage">
         <position x="11" y="0" width="3" height="3" />
     </widget>
 </status-config>

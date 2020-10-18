@@ -1,7 +1,7 @@
 try:
-    from status_widget import LcarswmStatusWidget
+    from status_widget import LcarsdeStatusWidget
 except ImportError:
-    from .status_widget import LcarswmStatusWidget
+    from .status_widget import LcarsdeStatusWidget
 
 from datetime import datetime, timezone
 import os
@@ -32,7 +32,7 @@ def sort_dict_by_key(data):
     return new_dict
 
 
-class LcarswmStatusText(LcarswmStatusWidget):
+class LcarsdeStatusText(LcarsdeStatusWidget):
     """
     LcarswmStatusText is an abstract class that acts as a frame for widgets
     that display one short line of text. This widget draws text without its
@@ -42,7 +42,7 @@ class LcarswmStatusText(LcarswmStatusWidget):
     """
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusWidget.__init__(self, width, height, css_provider, properties)
 
         self.drawing_area = Gtk.DrawingArea()
         self.drawing_area.set_size_request(width, height)
@@ -72,7 +72,7 @@ class LcarswmStatusText(LcarswmStatusWidget):
         self.drawing_area.queue_draw()
 
 
-class LcarswmStatusRadarGraph(LcarswmStatusWidget):
+class LcarsdeStatusRadarGraph(LcarsdeStatusWidget):
     """
     This widget is an abstract widget for drawing data into a radar graph.
 
@@ -80,7 +80,7 @@ class LcarswmStatusRadarGraph(LcarswmStatusWidget):
     """
 
     def __init__(self, width, height, css_provider, properties, max_scale):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusWidget.__init__(self, width, height, css_provider, properties)
 
         self.cx = width / 2
         self.cy = height / 2
@@ -138,7 +138,7 @@ class LcarswmStatusRadarGraph(LcarswmStatusWidget):
         return self.cx + x, self.cy + y
 
 
-class LcarswmStatusTime(LcarswmStatusText):
+class LcarsdeStatusTime(LcarsdeStatusText):
     """
     This widget draws the local time in a 24h format.
 
@@ -146,14 +146,14 @@ class LcarswmStatusTime(LcarswmStatusText):
     """
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusText.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusText.__init__(self, width, height, css_provider, properties)
 
     def create_text(self):
         now = datetime.now()
         return now.strftime("%H:%M:%S")
 
 
-class LcarswmStatusDate(LcarswmStatusText):
+class LcarsdeStatusDate(LcarsdeStatusText):
     """
     This widget draws the current date.
 
@@ -161,14 +161,14 @@ class LcarswmStatusDate(LcarswmStatusText):
     """
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusText.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusText.__init__(self, width, height, css_provider, properties)
 
     def create_text(self):
         now = datetime.now()
         return now.strftime("%d.%m.%y")
 
 
-class LcarswmStatusStardate(LcarswmStatusText):
+class LcarsdeStatusStardate(LcarsdeStatusText):
     """
     This widget draws the current star date.
 
@@ -179,7 +179,7 @@ class LcarswmStatusStardate(LcarswmStatusText):
     """
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusText.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusText.__init__(self, width, height, css_provider, properties)
 
     @staticmethod
     def days_per_month(days_per_year):
@@ -200,7 +200,7 @@ class LcarswmStatusStardate(LcarswmStatusText):
     @staticmethod
     def passed_month_days(current_month, days_per_year):
         days = 0
-        for (month, month_days) in LcarswmStatusStardate.days_per_month(days_per_year).items():
+        for (month, month_days) in LcarsdeStatusStardate.days_per_month(days_per_year).items():
             if current_month > month:
                 days += month_days
         return days
@@ -212,7 +212,7 @@ class LcarswmStatusStardate(LcarswmStatusText):
         hours = now.hour
         minutes = now.minute
         days_in_year = 366 if years % 4 == 0 and (years % 100 != 0 or years % 400 == 0) else 365
-        day = now.day + LcarswmStatusStardate.passed_month_days(now.month, days_in_year)
+        day = now.day + LcarsdeStatusStardate.passed_month_days(now.month, days_in_year)
 
         earth_time = years + (day - 1 + hours / 24 + minutes / 1440) / days_in_year
         star_date = 1000 * (earth_time - 2323)
@@ -223,7 +223,7 @@ class LcarswmStatusStardate(LcarswmStatusText):
         return f"{star_date:.2f}"[:-1]
 
 
-class LcarswmStatusTemperature(LcarswmStatusRadarGraph):
+class LcarsdeStatusTemperature(LcarsdeStatusRadarGraph):
     """
     This widget draws temperatures from thermal zones into a graph.
 
@@ -234,12 +234,12 @@ class LcarswmStatusTemperature(LcarswmStatusRadarGraph):
     warning_temperature = 80
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusRadarGraph.__init__(self, width, height, css_provider, properties, 125)
+        LcarsdeStatusRadarGraph.__init__(self, width, height, css_provider, properties, 125)
 
         self.update()
 
     def draw_data(self, context):
-        temperatures = sort_dict_by_key(LcarswmStatusTemperature.get_temperatures()).values()
+        temperatures = sort_dict_by_key(LcarsdeStatusTemperature.get_temperatures()).values()
 
         if not temperatures:
             # the system doesn't give us temperature sensors (maybe a virtual machine)
@@ -290,7 +290,7 @@ class LcarswmStatusTemperature(LcarswmStatusRadarGraph):
         return temp_dict
 
 
-class LcarswmStatusCpuUsage(LcarswmStatusRadarGraph):
+class LcarsdeStatusCpuUsage(LcarsdeStatusRadarGraph):
     """
     This widget draws temperatures from thermal zones into a graph.
 
@@ -301,7 +301,7 @@ class LcarswmStatusCpuUsage(LcarswmStatusRadarGraph):
     warning_frequency = 80
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusRadarGraph.__init__(self, width, height, css_provider, properties, 100)
+        LcarsdeStatusRadarGraph.__init__(self, width, height, css_provider, properties, 100)
         self.last_idles_totals = None
 
         self.update()
@@ -373,7 +373,7 @@ class LcarswmStatusCpuUsage(LcarswmStatusRadarGraph):
             return None
 
 
-class LcarswmStatusAudio(LcarswmStatusWidget):
+class LcarsdeStatusAudio(LcarsdeStatusWidget):
     """
     This widget has a volume level display and basic audio controls (mute, quieter, louder)
 
@@ -381,7 +381,7 @@ class LcarswmStatusAudio(LcarswmStatusWidget):
     """
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusWidget.__init__(self, width, height, css_provider, properties)
 
         audio_handler_name = properties["handler"]
         audio_handler_module = properties["handlerModule"]
@@ -520,17 +520,17 @@ class LcarswmStatusAudio(LcarswmStatusWidget):
         context.fill()
 
 
-class LcarswmNetworkStatus(LcarswmStatusWidget):
+class LcarsdeNetworkStatus(LcarsdeStatusWidget):
     """
     """
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusWidget.__init__(self, width, height, css_provider, properties)
         # /proc/net/wireless -> link
         # /sys/class/net -> e* / w*
 
 
-class LcarswmBatteryStatus(LcarswmStatusWidget):
+class LcarsdeBatteryStatus(LcarsdeStatusWidget):
     """
     This widget displays the status of the configured battery.
 
@@ -540,7 +540,7 @@ class LcarswmBatteryStatus(LcarswmStatusWidget):
     """
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusWidget.__init__(self, width, height, css_provider, properties)
 
         self.warning_capacity = int(properties.get("warningCapacity", "10"))
 
@@ -609,7 +609,7 @@ class LcarswmBatteryStatus(LcarswmStatusWidget):
         self.drawing_area.queue_draw()
 
 
-class LcarswmWifiStatus(LcarswmStatusWidget):
+class LcarsdeWifiStatus(LcarsdeStatusWidget):
     """
     This widget displays the status of the configured wifi adapter.
 
@@ -621,7 +621,7 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
     """
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusWidget.__init__(self, width, height, css_provider, properties)
 
         self.drawing_area = Gtk.DrawingArea()
         self.drawing_area.set_size_request(width, height)
@@ -694,7 +694,7 @@ class LcarswmWifiStatus(LcarswmStatusWidget):
         self.drawing_area.queue_draw()
 
 
-class LcarswmEthStatus(LcarswmStatusWidget):
+class LcarsdeEthStatus(LcarsdeStatusWidget):
     """
     This widget displays the status of the configured ethernet adapter.
 
@@ -704,7 +704,7 @@ class LcarswmEthStatus(LcarswmStatusWidget):
     """
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusWidget.__init__(self, width, height, css_provider, properties)
 
         self.drawing_area = Gtk.DrawingArea()
         self.drawing_area.set_size_request(width, height)
@@ -783,7 +783,7 @@ class LcarswmEthStatus(LcarswmStatusWidget):
         self.drawing_area.queue_draw()
 
 
-class LcarswmStatusButton(LcarswmStatusWidget):
+class LcarsdeStatusButton(LcarsdeStatusWidget):
     """
     This widget is used show a button for executing commands.
 
@@ -800,7 +800,7 @@ class LcarswmStatusButton(LcarswmStatusWidget):
         "c69"]
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusWidget.__init__(self, width, height, css_provider, properties)
 
         text = properties["text"].upper()
         self.button = Gtk.Button(label=text)
@@ -822,7 +822,7 @@ class LcarswmStatusButton(LcarswmStatusWidget):
         p.start()
 
 
-class LcarswmStatusFiller(LcarswmStatusWidget):
+class LcarsdeStatusFiller(LcarsdeStatusWidget):
     """
     This widget is used to fill empty space in the status bar.
 
@@ -835,7 +835,7 @@ class LcarswmStatusFiller(LcarswmStatusWidget):
         "f96"]
 
     def __init__(self, width, height, css_provider, properties):
-        LcarswmStatusWidget.__init__(self, width, height, css_provider, properties)
+        LcarsdeStatusWidget.__init__(self, width, height, css_provider, properties)
 
         text = str(randint(0, 9999)).zfill(4)
         self.label = Gtk.Label(label=text)

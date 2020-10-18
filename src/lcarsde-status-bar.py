@@ -3,7 +3,7 @@ from threading import Thread
 from time import sleep
 import importlib
 import numpy as np
-from lcarswm import internal_widgets as iw
+from lcarsde import internal_widgets as iw
 import xml.etree.ElementTree as ET
 import os.path
 
@@ -144,7 +144,7 @@ def load_widget_configuration(path):
     return widgets
 
 
-class LcarswmStatusBar(Gtk.Window):
+class LcarsdeStatusBar(Gtk.Window):
     """
     The status bar window implementation
     """
@@ -159,7 +159,7 @@ class LcarswmStatusBar(Gtk.Window):
         self.get_style_context().add_provider(self.css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
 
         self.width = 40
-        self.height = LcarswmStatusBar.get_pixels_for_cells(3)  # remains constant by design
+        self.height = LcarsdeStatusBar.get_pixels_for_cells(3)  # remains constant by design
 
         self.grid = Gtk.Grid()
         self.grid.set_column_spacing(GAP_SIZE)
@@ -224,8 +224,8 @@ class LcarswmStatusBar(Gtk.Window):
         configuration_path = get_configuration_path()
         for widget_config in load_widget_configuration(configuration_path):
             widget = getattr(importlib.import_module(widget_config.module, widget_config.package), widget_config.widget)
-            widget_instance = widget(LcarswmStatusBar.get_pixels_for_cells(widget_config.width),
-                                     LcarswmStatusBar.get_pixels_for_cells(widget_config.height),
+            widget_instance = widget(LcarsdeStatusBar.get_pixels_for_cells(widget_config.width),
+                                     LcarsdeStatusBar.get_pixels_for_cells(widget_config.height),
                                      self.css_provider,
                                      widget_config.properties)
             widget_dict[widget_instance] = widget_config
@@ -329,7 +329,7 @@ class LcarswmStatusBar(Gtk.Window):
 
         col_index = -1 if pixels_to_add == GAP_SIZE else 0
 
-        self.grid.attach(iw.LcarswmStatusWidget(pixels_to_add - GAP_SIZE, CELL_SIZE, self.css_provider, {}),
+        self.grid.attach(iw.LcarsdeStatusWidget(pixels_to_add - GAP_SIZE, CELL_SIZE, self.css_provider, {}),
                          col_index, 0, 1, 1)
 
     def fill_with_filler_widgets(self, filler_count, pixels_to_add):
@@ -339,12 +339,12 @@ class LcarswmStatusBar(Gtk.Window):
         :param filler_count: number of fillers
         :param pixels_to_add: amount of pixels to distribute over fillers (not fitting into used cells)
         """
-        pixels_per_filler = LcarswmStatusBar.additional_pixels_per_filler(filler_count, pixels_to_add)
+        pixels_per_filler = LcarsdeStatusBar.additional_pixels_per_filler(filler_count, pixels_to_add)
 
         for col in range(filler_count):
             width = CELL_SIZE * 2 + GAP_SIZE + pixels_per_filler[col]
             for row in range(3):
-                self.grid.attach(iw.LcarswmStatusFiller(width, CELL_SIZE, self.css_provider, {}), col*2, row, 2, 1)
+                self.grid.attach(iw.LcarsdeStatusFiller(width, CELL_SIZE, self.css_provider, {}), col * 2, row, 2, 1)
 
     @staticmethod
     def additional_pixels_per_filler(filler_count, pixels_to_add):
@@ -383,7 +383,7 @@ class LcarswmStatusBar(Gtk.Window):
 
 
 if __name__ == "__main__":
-    win = LcarswmStatusBar()
+    win = LcarsdeStatusBar()
     win.connect("destroy", Gtk.main_quit)
     win.show_all()
     Gtk.main()
