@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-from threading import Thread
+from threading import Thread, Lock
 from time import sleep
 import importlib
 import numpy as np
 from lcarsde import internal_widgets as iw
 import xml.etree.ElementTree as ET
 import os.path
+import sys
 
 import gi
 gi.require_version("Gtk", "3.0")
@@ -172,6 +173,7 @@ class LcarsdeStatusBar(Gtk.Window):
         self.stop_threads = False
         self.update_thread = Thread(target=self.update_widgets, args=(lambda: self.stop_threads, self))
         self.update_thread.daemon = True
+        self.lock = Lock()
 
         self.connect("size-allocate", self.on_size_allocate)
         self.connect("realize", self.on_create)
@@ -211,8 +213,9 @@ class LcarsdeStatusBar(Gtk.Window):
         """
         new_width = self.get_allocation().width
         if new_width != self.width:
-            self.width = new_width
-            self.update_layout()
+            with self.lock:
+                self.width = new_width
+                self.update_layout()
 
     def import_widgets(self):
         """
@@ -247,6 +250,15 @@ class LcarsdeStatusBar(Gtk.Window):
         """
         horizontal_cells, left_over_pixels = self.get_cells_and_overflow()
         self.cleanup_grid()
+        self.remove(self.grid)
+        self.set_size_request(self.width, self.height)
+
+        self.grid = Gtk.Grid()
+        self.grid.set_column_spacing(GAP_SIZE)
+        self.grid.set_row_spacing(GAP_SIZE)
+        self.grid.get_style_context().add_provider(self.css_provider, Gtk.STYLE_PROVIDER_PRIORITY_USER)
+        self.add(self.grid)
+
         self.fill_status_bar(horizontal_cells, left_over_pixels)
 
     def get_cells_and_overflow(self):
@@ -280,7 +292,10 @@ class LcarsdeStatusBar(Gtk.Window):
 
         self.fill_empty_space(widget_map, left_over_pixels)
 
+        self.grid.queue_draw()
         self.grid.show_all()
+        self.queue_draw()
+        self.show_all()
 
     def fill_configured_widgets(self, horizontal_cells):
         """
@@ -373,8 +388,12 @@ class LcarsdeStatusBar(Gtk.Window):
         Trigger a widget update (called in daemon thread).
         """
         while True:
-            for widget in self.widget_dict:
-                GLib.idle_add(widget.update)
+            try:
+                with self.lock:
+                    for widget in self.widget_dict:
+                        GLib.idle_add(widget.update)
+            except Exception:
+                print(sys.exc_info()[0])
 
             if stop():
                 break
