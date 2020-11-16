@@ -2,7 +2,7 @@
 
 echo ""
 echo "=========================================="
-echo "lcarsde application starter installation"
+echo "lcarsde status bar installation"
 echo "=========================================="
 echo ""
 echo "This program requires:"
