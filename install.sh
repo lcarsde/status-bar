@@ -1,21 +1,24 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 echo ""
 echo "=========================================="
-echo "lcarsde status bar installation"
+echo "status-bar installation"
 echo "=========================================="
 echo ""
 echo "This program requires:"
-echo "* Python 3.8"
-echo "* Python 3 PyGObject"
-echo "* Python pycairo"
-echo "* Python numpy"
-echo "* Python pyalsaaudio"
-echo "* Alsa audio for audio widgets"
+echo "* JDK >= 8"
+echo "* libgtk-3-dev"
+echo "* libpango1.0-dev"
+echo "* libxml2-dev"
+echo "* libpango1.0-0"
+echo "* libxml2"
+echo ""
+echo "Recommended:"
+echo "* fonts-ubuntu"
 echo ""
 
+./gradlew build
 
-cp ./src/lcarsde-status-bar.py /usr/bin/lcarsde-status-bar.py
-cp -R ./resources/etc/* /etc/
-
-pip install ./src
+cp "./build/bin/native/releaseExecutable/status-bar.kexe" "/usr/bin/lcarsde-status-bar.kexe"
+cp -r "./src/nativeMain/resources/usr/*" "/usr/"
+cp -r "./src/nativeMain/resources/etc/*" "/etc/"

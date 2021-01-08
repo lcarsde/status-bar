@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <status-config>
     <!--
-    A widget configuration entry consists of a widget tag that has a widget class name and module (mandatory).
-    If necessary you can specify the package of the widget module.
+    A widget configuration entry consists of a widget tag that has a references a widget class.
 
     In the widget entry there has to be one position tag with x, y, width and height of the widget in cells. Each cell
     is 40px by 40px. If the widget spans over multiple cells then it also spans over 8px gaps between the cells.
@@ -14,7 +13,7 @@
     Example entry below:
     -->
 
-    <!--<widget package="mypackage" module="my_module" name="MyWidget">
+    <!--<widget name="MyWidget">
         <position x="0" y="0" width="2" height="1" />
         <properties>
             <property key="key1" value="value1" />
@@ -22,47 +21,45 @@
         </properties>
     </widget>-->
 
-    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusTime">
+    <widget name="LcarsdeStatusTime">
         <position x="0" y="0" width="4" height="1" />
     </widget>
-    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusDate">
+    <widget name="LcarsdeStatusDate">
         <position x="0" y="1" width="4" height="1" />
     </widget>
-    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusAudio">
+    <widget name="LcarsdeStatusAudio">
         <position x="0" y="2" width="4" height="1" />
         <properties>
-            <!-- Audio widget properties -->
-            <!-- Audio handler needs to be an instance of lcarsde.audio.AudioMixer -->
-            <!--<property key="handlerPackage" value="mypackage" />-->
-            <property key="handlerModule" value="lcarsde.audio" />
-            <property key="handler" value="AlsaAudioMixer" />
-            <!-- Audio handler properties -->
-            <property key="control" value="Master"/><!-- might be PCM -->
-            <property key="stepSize" value="3" />
+            <!-- used to get the audio status -->
+            <!-- returns "volume;muted" -->
+            <property key="getData" value="/usr/share/lcarsde/tools/getaudio.sh" />
+            <property key="toggleMute" value="amixer -D pulse set Master toggle" />
+            <property key="raiseVolume" value="amixer -D pulse set Master 3%+" />
+            <property key="lowerVolume" value="amixer -D pulse set Master 3%-" />
         </properties>
     </widget>
-    <widget module="lcarsde.internal_widgets" name="LcarsdeBatteryStatus">
+    <widget name="LcarsdeBatteryStatus">
         <position x="4" y="0" width="1" height="1" />
         <properties>
             <!-- Device should correspond to a folder in /sys/class/power_supply that starts with "BAT" -->
             <property key="device" value="BAT0" />
         </properties>
     </widget>
-    <widget module="lcarsde.internal_widgets" name="LcarsdeWifiStatus">
+    <widget name="LcarsdeWifiStatus">
         <position x="4" y="2" width="1" height="1" />
         <properties>
             <!-- Device should correspond to a folder in /sys/class/net that starts with "BAT" -->
             <property key="device" value="wlp2s0" />
         </properties>
     </widget>
-    <widget module="lcarsde.internal_widgets" name="LcarsdeEthStatus">
+    <widget name="LcarsdeEthStatus">
         <position x="4" y="1" width="1" height="1" />
         <properties>
             <!-- Device should correspond to a folder in /sys/class/net that starts with "BAT" -->
             <property key="device" value="enp0s20f0u2u3i5" />
         </properties>
     </widget>
-    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusButton">
+    <widget name="LcarsdeStatusButton">
         <position x="5" y="0" width="3" height="1" />
         <properties>
             <property key="text" value="Programs" />
@@ -70,7 +67,7 @@
             <property key="command" value="lcarsde-application-starter.py" />
         </properties>
     </widget>
-    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusButton">
+    <widget name="LcarsdeStatusButton">
         <position x="5" y="2" width="3" height="1" />
         <properties>
             <property key="text" value="Close" />
@@ -78,10 +75,10 @@
             <property key="command" value="lcarsde-logout.py" />
         </properties>
     </widget>
-    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusTemperature">
+    <widget name="LcarsdeStatusTemperature">
         <position x="8" y="0" width="3" height="3" />
     </widget>
-    <widget module="lcarsde.internal_widgets" name="LcarsdeStatusCpuUsage">
+    <widget name="LcarsdeStatusCpuUsage">
         <position x="11" y="0" width="3" height="3" />
     </widget>
 </status-config>

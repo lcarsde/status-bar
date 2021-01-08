@@ -1,0 +1,14 @@
+os: linux
+dist: xenial
+
+language: java
+jdk: openjdk8
+
+notifications:
+  email:
+    on_success: never
+    on_failure: always
+
+before_install:
+  - sudo apt-get update
+  - sudo apt-get install -y openjdk-8-jdk-headless libx11-dev libgtk-3-dev libxml2-dev
