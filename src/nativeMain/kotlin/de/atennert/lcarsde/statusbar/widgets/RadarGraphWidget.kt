@@ -1,7 +1,7 @@
 package de.atennert.lcarsde.statusbar.widgets
 
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
-import de.atennert.lcarsde.statusbar.gSignalConnect
+import de.atennert.lcarsde.statusbar.extensions.gSignalConnect
 import kotlinx.cinterop.*
 import statusbar.*
 import kotlin.math.PI

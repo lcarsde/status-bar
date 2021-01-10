@@ -1,12 +1,11 @@
 package de.atennert.lcarsde.statusbar.widgets
 
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
-import de.atennert.lcarsde.statusbar.gSignalConnect
+import de.atennert.lcarsde.statusbar.extensions.gSignalConnect
 import de.atennert.lcarsde.statusbar.readFile
 import kotlinx.cinterop.*
 import statusbar.*
 import kotlin.math.PI
-import kotlin.math.max
 
 class WifiWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>) :
     StatusWidget(widgetConfiguration, cssProvider, 1000) {

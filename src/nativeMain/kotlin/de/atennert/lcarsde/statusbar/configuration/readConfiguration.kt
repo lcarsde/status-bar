@@ -1,9 +1,8 @@
 package de.atennert.lcarsde.statusbar.configuration
 
-import de.atennert.lcarsde.statusbar.toKString
-import de.atennert.lcarsde.statusbar.toUByteArray
+import de.atennert.lcarsde.statusbar.extensions.toKString
+import de.atennert.lcarsde.statusbar.extensions.toUByteArray
 import kotlinx.cinterop.*
-import kotlinx.cinterop.toKString
 import platform.posix.F_OK
 import platform.posix.access
 import platform.posix.getenv

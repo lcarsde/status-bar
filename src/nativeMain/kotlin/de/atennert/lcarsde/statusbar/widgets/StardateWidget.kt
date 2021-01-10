@@ -1,7 +1,7 @@
 package de.atennert.lcarsde.statusbar.widgets
 
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
-import de.atennert.lcarsde.statusbar.print
+import de.atennert.lcarsde.statusbar.extensions.print
 import kotlinx.cinterop.CPointer
 import statusbar.*
 

@@ -2,6 +2,8 @@ package de.atennert.lcarsde.statusbar
 
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
 import de.atennert.lcarsde.statusbar.configuration.readConfiguration
+import de.atennert.lcarsde.statusbar.extensions.gSignalConnect
+import de.atennert.lcarsde.statusbar.extensions.setStyling
 import de.atennert.lcarsde.statusbar.widgets.EmptyWidget
 import de.atennert.lcarsde.statusbar.widgets.StatusFillerWidget
 import de.atennert.lcarsde.statusbar.widgets.StatusWidget

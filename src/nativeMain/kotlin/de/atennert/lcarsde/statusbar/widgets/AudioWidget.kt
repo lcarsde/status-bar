@@ -1,7 +1,10 @@
 package de.atennert.lcarsde.statusbar.widgets
 
-import de.atennert.lcarsde.statusbar.*
+import de.atennert.lcarsde.statusbar.CELL_SIZE
+import de.atennert.lcarsde.statusbar.GAP_SIZE
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
+import de.atennert.lcarsde.statusbar.executeCommand
+import de.atennert.lcarsde.statusbar.extensions.gSignalConnect
 import kotlinx.cinterop.*
 import statusbar.*
 

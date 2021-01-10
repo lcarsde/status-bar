@@ -6,8 +6,8 @@ import kotlinx.cinterop.CPointer
 import statusbar.GtkCssProvider
 import statusbar.cairo_t
 
-class CpuUsageWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>)
-    : RadarGraphWidget(widgetConfiguration, cssProvider, 500, 100) {
+class CpuUsageWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>) :
+    RadarGraphWidget(widgetConfiguration, cssProvider, 500, 100) {
 
     private val attentionFreq = 60
     private val warningFreq = 80
@@ -37,14 +37,14 @@ class CpuUsageWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPoi
     private fun getCpuUtilization(): List<Double> {
         val statData = readFile("/proc/stat")?.lines() ?: return emptyList()
         val cpuData = statData
-                .filter { it.startsWith("cpu") }
-                .drop(1)
-                .map {
-                    it.trim()
-                            .split(' ')
-                            .drop(1)
-                            .map(String::toFloat)
-                }
+            .filter { it.startsWith("cpu") }
+            .drop(1)
+            .map {
+                it.trim()
+                    .split(' ')
+                    .drop(1)
+                    .map(String::toFloat)
+            }
         val idlesTotals = cpuData.map { Pair(it[3] + it[4], it.sum()) }
 
         val deltas = if (lastIdlesTotals.isEmpty()) {
@@ -54,7 +54,8 @@ class CpuUsageWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPoi
         }
         lastIdlesTotals = idlesTotals
 
-        return deltas.map { (idle, total) -> try {
+        return deltas.map { (idle, total) ->
+            try {
                 100 * (1.0 - idle / total)
             } catch (e: ArithmeticException) {
                 100 * (1.0 - idle / 0.001)
