@@ -11,14 +11,14 @@ A widget may support different cell-based sizes. The final width and height can 
 The status bar application checks that the given configurations match with the available sizes of the widgets and the configured sizes and positions don't overlap or lie outside of the grid. The check for positioning are at least in y direction. In x direction the checks may be replaced with fallback behavior if the widgets reach out of the grid width to support changes of the display size.
 
 ## Currently available widgets
-*LcarsdeStatusTime* - Shows the current time
-*LcarsdeStatusDate* - Shows the current date
-*LcarsdeStatusStardate* - Shows the current star date
-*LcarsdeStatusTemperature* - Shows a graph with the temperatures from the computer temperature sensors
-*LcarsdeStatusCpuUsage* - Shows a graph with the current usages of the different CPU cores
-*LcarsdeStatusAudio* - Shows the volume level and provides buttons for basic audio actions; This needs ALSA!
-*LcarsdeBatteryStatus* - Shows the computers battery status
-*LcarsdeWifiStatus* - Shows the status of a wifi connector
-*LcarsdeEthStatus* - Shows the status of an ethernet connector
-*LcarsdeStatusButton* - Button for executing a command/running a program
-*LcarsdeStatusFiller* - Used to fill empty space in the status bar; there's usually no need to explicitly configure it
+* *LcarsdeStatusTime* - Shows the current time
+* *LcarsdeStatusDate* - Shows the current date
+* *LcarsdeStatusStardate* - Shows the current star date
+* *LcarsdeStatusTemperature* - Shows a graph with the temperatures from the computer temperature sensors
+* *LcarsdeStatusCpuUsage* - Shows a graph with the current usages of the different CPU cores
+* *LcarsdeStatusAudio* - Shows the volume level and provides buttons for basic audio actions; This needs ALSA!
+* *LcarsdeBatteryStatus* - Shows the computers battery status
+* *LcarsdeWifiStatus* - Shows the status of a wifi connector
+* *LcarsdeEthStatus* - Shows the status of an ethernet connector
+* *LcarsdeStatusButton* - Button for executing a command/running a program
+* *LcarsdeStatusFiller* - Used to fill empty space in the status bar; there's usually no need to explicitly configure it
