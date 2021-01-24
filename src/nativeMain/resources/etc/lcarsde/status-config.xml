@@ -27,16 +27,8 @@
     <widget name="LcarsdeStatusDate">
         <position x="0" y="1" width="4" height="1" />
     </widget>
-    <widget name="LcarsdeStatusAudio">
+    <widget name="LcarsdeStatusStardate">
         <position x="0" y="2" width="4" height="1" />
-        <properties>
-            <!-- used to get the audio status -->
-            <!-- returns "volume;muted" -->
-            <property key="getData" value="/usr/share/lcarsde/tools/getaudio.sh" />
-            <property key="toggleMute" value="amixer -D pulse set Master toggle" />
-            <property key="raiseVolume" value="amixer -D pulse set Master 3%+" />
-            <property key="lowerVolume" value="amixer -D pulse set Master 3%-" />
-        </properties>
     </widget>
     <widget name="LcarsdeBatteryStatus">
         <position x="4" y="0" width="1" height="1" />
@@ -59,8 +51,19 @@
             <property key="device" value="enp0s20f0u2u3i5" />
         </properties>
     </widget>
+    <widget name="LcarsdeStatusAudio">
+        <position x="5" y="0" width="4" height="1" />
+        <properties>
+            <!-- used to get the audio status -->
+            <!-- returns "volume;muted" -->
+            <property key="getData" value="/usr/share/lcarsde/tools/getaudio.sh" />
+            <property key="toggleMute" value="amixer -D pulse set Master toggle" />
+            <property key="raiseVolume" value="amixer -D pulse set Master 3%+" />
+            <property key="lowerVolume" value="amixer -D pulse set Master 3%-" />
+        </properties>
+    </widget>
     <widget name="LcarsdeStatusButton">
-        <position x="5" y="0" width="3" height="1" />
+        <position x="5" y="1" width="4" height="1" />
         <properties>
             <property key="text" value="Programs" />
             <property key="color" value="f90" />
@@ -68,7 +71,7 @@
         </properties>
     </widget>
     <widget name="LcarsdeStatusButton">
-        <position x="5" y="2" width="3" height="1" />
+        <position x="5" y="2" width="4" height="1" />
         <properties>
             <property key="text" value="Close" />
             <property key="color" value="c66" />
@@ -76,9 +79,9 @@
         </properties>
     </widget>
     <widget name="LcarsdeStatusTemperature">
-        <position x="8" y="0" width="3" height="3" />
+        <position x="9" y="0" width="3" height="3" />
     </widget>
     <widget name="LcarsdeStatusCpuUsage">
-        <position x="11" y="0" width="3" height="3" />
+        <position x="12" y="0" width="3" height="3" />
     </widget>
 </status-config>
