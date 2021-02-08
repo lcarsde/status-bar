@@ -40,14 +40,14 @@
     <widget name="LcarsdeWifiStatus">
         <position x="4" y="2" width="1" height="1" />
         <properties>
-            <!-- Device should correspond to a folder in /sys/class/net that starts with "BAT" -->
+            <!-- Device should correspond to a folder in /sys/class/net that starts with "w" -->
             <property key="device" value="wlp2s0" />
         </properties>
     </widget>
     <widget name="LcarsdeEthStatus">
         <position x="4" y="1" width="1" height="1" />
         <properties>
-            <!-- Device should correspond to a folder in /sys/class/net that starts with "BAT" -->
+            <!-- Device should correspond to a folder in /sys/class/net that starts with "e" -->
             <property key="device" value="enp0s20f0u2u3i5" />
         </properties>
     </widget>
