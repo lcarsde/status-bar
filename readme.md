@@ -13,10 +13,10 @@ The status bar application checks that the given configurations match with the a
 ## Currently available widgets
 * *LcarsdeStatusTime* - Shows the current time
 * *LcarsdeStatusDate* - Shows the current date
-* *LcarsdeStatusStardate* - Shows the current star date
+* *LcarsdeStatusStardate* - Shows the current star date (based on some TNG time calculation I found somewhere)
 * *LcarsdeStatusTemperature* - Shows a graph with the temperatures from the computer temperature sensors
 * *LcarsdeStatusCpuUsage* - Shows a graph with the current usages of the different CPU cores
-* *LcarsdeStatusAudio* - Shows the volume level and provides buttons for basic audio actions; This needs ALSA!
+* *LcarsdeStatusAudio* - Shows the volume level and provides buttons for basic audio actions; The audio status is provided by some executable that prints `volume;muted` where volume is a number from 0 to 100 and muted is yes or 1 for muted and anything else for unmuted
 * *LcarsdeBatteryStatus* - Shows the computers battery status
 * *LcarsdeWifiStatus* - Shows the status of a wifi connector
 * *LcarsdeEthStatus* - Shows the status of an ethernet connector
