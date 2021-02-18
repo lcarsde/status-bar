@@ -1,0 +1,7 @@
+21.2
+* add linking for systems with /usr/lib64 instead of /usr/lib
+
+21.1
+* rewrite in Kotlin
+* fix bug of audio widget getting stuck
+* fix bug of whole status-bar crashing
