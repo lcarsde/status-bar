@@ -1,5 +1,6 @@
 21.2
 * add linking for systems with /usr/lib64 instead of /usr/lib
+* fix issue where the app is not redrawn on size changes
 
 21.1
 * rewrite in Kotlin

@@ -21,7 +21,8 @@ class StatusBar {
         window.setStyling(cssProvider, "window")
 
         gSignalConnect(window, "realize", staticCFunction { w: CPointer<GtkWidget>? -> create(w) })
-        gSignalConnect(window, "size-allocate", staticCFunction { w: CPointer<GtkWidget>? -> sizeAdjust(w) })
+        gSignalConnect(window, "configure-event",
+            staticCFunction { w: CPointer<GtkWidget>?, e: CPointer<GdkEvent>? -> configure(w, e) })
 
         gtk_grid_set_column_spacing(grid.reinterpret(), GAP_SIZE.convert())
         gtk_grid_set_row_spacing(grid.reinterpret(), GAP_SIZE.convert())
@@ -48,16 +49,20 @@ class StatusBar {
          */
         private fun create(widget: CPointer<GtkWidget>?) {
             val gdkWindow = gtk_widget_get_window(widget)
+            gdk_window_set_events(gdkWindow, GDK_STRUCTURE_MASK)
             gdk_x11_window_set_utf8_property(gdkWindow, LCARSDE_STATUS_BAR, LCARSDE_STATUS_BAR)
         }
 
-        private fun sizeAdjust(widget: CPointer<GtkWidget>?) {
-            val allocation = nativeHeap.alloc<GtkAllocation>()
-            gtk_widget_get_allocation(widget, allocation.ptr)
-            if (allocation.width != currentWidth) {
-                currentWidth = allocation.width
+        private fun configure(widget: CPointer<GtkWidget>?, event: CPointer<GdkEvent>?) {
+            val configureData = event?.pointed?.configure
+            if (configureData != null) {
+                gtk_widget_set_size_request(widget, configureData.width, configureData.height)
 
-                updateLayout()
+                if (configureData.width != currentWidth) {
+                    currentWidth = configureData.width
+
+                    updateLayout()
+                }
             }
         }
 
