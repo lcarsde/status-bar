@@ -8,8 +8,6 @@ A widget may support different cell-based sizes. The final width and height can 
 
 *Example*: A widget supports a width of 3 cells and a height of 1 cell. Its width will be 40px + 8px + 40px + 8px + 40px = 136px wide and 40px high. It needs to return this mode as width = 3 and height = 1.
 
-The status bar application checks that the given configurations match with the available sizes of the widgets and the configured sizes and positions don't overlap or lie outside of the grid. The check for positioning are at least in y direction. In x direction the checks may be replaced with fallback behavior if the widgets reach out of the grid width to support changes of the display size.
-
 ## Currently available widgets
 * *LcarsdeStatusTime* - Shows the current time
 * *LcarsdeStatusDate* - Shows the current date
