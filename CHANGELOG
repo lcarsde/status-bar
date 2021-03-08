@@ -1,3 +1,6 @@
+21.3
+* add widget for displaying memory (RAM) status
+
 21.2
 * add linking for systems with /usr/lib64 instead of /usr/lib
 * fix issue where the app is not redrawn on size changes
