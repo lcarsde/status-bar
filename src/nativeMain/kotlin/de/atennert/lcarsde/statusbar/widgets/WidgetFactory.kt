@@ -17,7 +17,7 @@ class WidgetFactory(private val cssProvider: CPointer<GtkCssProvider>) {
         "LcarsdeWifiStatus"         -> WifiWidget(configuration, cssProvider)
         "LcarsdeEthStatus"          -> EthernetWidget(configuration, cssProvider)
         "LcarsdeStatusAudio"        -> AudioWidget(configuration, cssProvider)
-        "LcarsdeStatusMemoryWidget" -> MemoryWidget(configuration, cssProvider)
+        "LcarsdeStatusMemory" -> MemoryWidget(configuration, cssProvider)
         else -> null
     }
 }
