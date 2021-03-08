@@ -6,7 +6,7 @@ The status bar is an application that consists of a freely configurable layout. 
 
 A widget may support different cell-based sizes. The final width and height can be set in the configuration file. The configuration file will contain the position and size for each widget in the grid. If a widget stretches over multiple cells it will also stretch over the 8px gaps.
 
-*Example*: A widget supports a width of 3 cells and a height of 1 cell. Its width will be 40px + 8px + 40px + 8px + 40px = 136px wide and 40px high. It needs to return this mode as width = 3 and height = 1.
+*Example*: A widget supports a width of 3 cells and a height of 1 cell. Its width will be 40px + 8px + 40px + 8px + 40px = 136px wide and 40px high. The configuration needs to state this mode as width = 3 and height = 1.
 
 ## Currently available widgets
 * *LcarsdeStatusTime* - Shows the current time
