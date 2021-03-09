@@ -19,4 +19,5 @@ A widget may support different cell-based sizes. The final width and height can 
 * *LcarsdeWifiStatus* - Shows the status of a wifi connector
 * *LcarsdeEthStatus* - Shows the status of an ethernet connector
 * *LcarsdeStatusButton* - Button for executing a command/running a program
+* *LcarsdeStatusMemory* - Shows the current memory usage
 * *LcarsdeStatusFiller* - Used to fill empty space in the status bar; there's usually no need to explicitly configure it
