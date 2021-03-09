@@ -5,6 +5,7 @@ import de.atennert.lcarsde.statusbar.extensions.gSignalConnect
 import de.atennert.lcarsde.statusbar.readFile
 import kotlinx.cinterop.*
 import statusbar.*
+import kotlin.math.PI
 
 class MemoryWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>)
     : StatusWidget(widgetConfiguration, cssProvider, 1000) {
@@ -68,6 +69,7 @@ class MemoryWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPoint
                 val memoryData = MemoryData(memoryInfo)
 
                 drawMemory(widget, context, 1.0, 0.8, 0.6)
+                clipForDrawing(widget, context)
                 drawMemoryStatus(widget, context, memoryData)
             }
         }
@@ -79,9 +81,14 @@ class MemoryWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPoint
         private fun drawMemory(widget: MemoryWidget, context: CPointer<cairo_t>, r: Double, g: Double, b: Double) {
             cairo_set_source_rgb(context, r, g, b)
 
-            cairo_rectangle(context, 5.0, 0.0, (widget.widthPx - 10.0), widget.heightPx.toDouble())
+            createBorderPath(widget, context)
 
             cairo_stroke(context)
+        }
+
+        private fun clipForDrawing(widget: MemoryWidget, context: CPointer<cairo_t>) {
+            createBorderPath(widget, context)
+            cairo_clip(context)
         }
 
         private fun drawMemoryStatus(widget: MemoryWidget, context: CPointer<cairo_t>, memoryData: MemoryData) {
@@ -97,13 +104,24 @@ class MemoryWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPoint
             val reservedBottom = usedBottom - usedHeight
             val reservedHeight = reservedMemory * (widget.heightPx - 2.0) / totalMemory
 
-            cairo_set_source_rgba(context, 1.0, 0.6, 0.4, 0.6)
-            cairo_rectangle(context, 6.0, usedBottom, (widget.widthPx - 12.0), -usedHeight)
+            cairo_set_source_rgba(context, 1.0, 0.8, 0.6, 0.6)
+            cairo_rectangle(context, 1.0, usedBottom, widget.widthPx - 2.0, -usedHeight)
             cairo_fill(context)
 
-            cairo_set_source_rgba(context, 1.0, 0.8, 0.6, 0.6)
-            cairo_rectangle(context, 6.0, reservedBottom, (widget.widthPx - 12.0), -reservedHeight)
+            cairo_set_source_rgba(context, 0.6, 0.6, 0.8, 0.6)
+            cairo_rectangle(context, 1.0, reservedBottom, widget.widthPx - 2.0, -reservedHeight)
             cairo_fill(context)
+        }
+
+        private fun createBorderPath(widget: MemoryWidget, context: CPointer<cairo_t>) {
+            cairo_arc(context, 20.0, 20.0, 20.0, 1.0 * PI, 1.5 * PI)
+            cairo_line_to(context, widget.widthPx - 20.0, 0.0)
+            cairo_arc(context, widget.widthPx - 20.0, 20.0, 20.0, 1.5 * PI, 2.0 * PI)
+            cairo_line_to(context, widget.widthPx.toDouble(), widget.heightPx - 20.0)
+            cairo_arc(context, widget.widthPx - 20.0, widget.heightPx - 20.0, 20.0, 0.0 * PI, 0.5 * PI)
+            cairo_line_to(context, 20.0, widget.heightPx.toDouble())
+            cairo_arc(context, 20.0, widget.heightPx - 20.0, 20.0, 0.5 * PI, 1.0 * PI)
+            cairo_close_path(context)
         }
     }
 }
