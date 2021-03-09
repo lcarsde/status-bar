@@ -28,6 +28,6 @@ class StatusFillerWidget(widgetConfiguration: WidgetConfiguration, cssProvider: 
     }
 
     companion object {
-        private val colors = arrayOf("c9c", "99c", "f96")
+        private val colors = arrayOf("c9c", "99c", "f96", "000")
     }
 }

@@ -59,6 +59,13 @@
     background-color: #f96;
     background: #f96; /* for Ubuntu */
 }
+/* hack for simulating empty space */
+.button--000 {
+    font-size: 16px;
+    color: #000;
+    background-color: #000;
+    background: #000; /* for Ubuntu */
+}
 .button--long {
     border-radius: 20px;
     padding: 2px 16px;
