@@ -38,6 +38,7 @@ class StatusBar {
         private val widgetFactory = WidgetFactory(cssProvider)
 
         private var widgets = emptyList<StatusWidget>()
+        private val fillerAnimation = FillerAnimation()
 
         private var currentWidth = 40 // px
         private var initialized = false
@@ -70,6 +71,7 @@ class StatusBar {
             val (horizontalCells, leftOverPixels) = getCellsAndOverflow()
             if (initialized) {
                 stop()
+                fillerAnimation.clearWidgets()
 
                 for (i in 1..3) {
                     gtk_grid_remove_row(grid.reinterpret(), 0)
@@ -153,6 +155,7 @@ class StatusBar {
                     val configuration = WidgetConfiguration("", 0, 0, 2, 1)
                             .withAddedPx(addedPixelsPerFiller[col])
                     val filler = StatusFillerWidget(configuration, cssProvider)
+                    fillerAnimation.addFillerWidget(filler)
                     gtk_grid_attach(grid.reinterpret(), filler.widget, col * 2, row, 2, 1)
                 }
             }
@@ -171,9 +174,11 @@ class StatusBar {
 
         private fun start() {
             widgets.forEach(StatusWidget::start)
+            fillerAnimation.startAnimation()
         }
 
         fun stop() {
+            fillerAnimation.stopAnimation()
             widgets.forEach(StatusWidget::stop)
         }
     }
