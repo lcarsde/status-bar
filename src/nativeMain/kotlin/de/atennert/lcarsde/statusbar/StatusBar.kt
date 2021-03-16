@@ -2,12 +2,10 @@ package de.atennert.lcarsde.statusbar
 
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
 import de.atennert.lcarsde.statusbar.configuration.readConfiguration
+import de.atennert.lcarsde.statusbar.configuration.settingsFilePath
 import de.atennert.lcarsde.statusbar.extensions.gSignalConnect
 import de.atennert.lcarsde.statusbar.extensions.setStyling
-import de.atennert.lcarsde.statusbar.widgets.EmptyWidget
-import de.atennert.lcarsde.statusbar.widgets.StatusFillerWidget
-import de.atennert.lcarsde.statusbar.widgets.StatusWidget
-import de.atennert.lcarsde.statusbar.widgets.WidgetFactory
+import de.atennert.lcarsde.statusbar.widgets.*
 import kotlinx.cinterop.*
 import statusbar.*
 
@@ -32,7 +30,7 @@ class StatusBar {
 
     @ThreadLocal
     companion object {
-        private val configuration = readConfiguration()
+        private val configuration = readConfiguration(settingsFilePath)
         private val cssProvider = gtk_css_provider_get_default()!!
         private val grid = gtk_grid_new()!!
         private val widgetFactory = WidgetFactory(cssProvider)

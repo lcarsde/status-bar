@@ -70,7 +70,7 @@ class StatusFillerWidget(widgetConfiguration: WidgetConfiguration, cssProvider: 
             }
         }
 
-        private fun createBorderPath(context: CPointer<cairo_t>, widget: StatusFillerWidget) {
+        private fun createBorderPath(context: CPointer<cairo_t>, widget: StatusWidget) {
             cairo_arc(context, 20.0, 20.0, 20.0, 1.0 * PI, 1.5 * PI)
             cairo_line_to(context, widget.widthPx - 20.0, 0.0)
             cairo_arc(context, widget.widthPx - 20.0, 20.0, 20.0, 1.5 * PI, 2.0 * PI)

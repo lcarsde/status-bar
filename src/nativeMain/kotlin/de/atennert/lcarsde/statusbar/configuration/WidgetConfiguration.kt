@@ -4,14 +4,14 @@ package de.atennert.lcarsde.statusbar.configuration
  * Widget entry of the status bar configuration.
  */
 data class WidgetConfiguration(
-        val name: String,
-        val x: Int,
-        val y: Int,
-        val width: Int,
-        val height: Int
+    val name: String,
+    val x: Int,
+    val y: Int,
+    val width: Int,
+    val height: Int
 ) {
     var addedPx = 0
-    private set
+        private set
 
     var properties = emptyMap<String, String>()
         private set

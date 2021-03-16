@@ -11,7 +11,7 @@ import statusbar.*
 private val userConfigPath = getenv("XDG_CONFIG_HOME")?.toKString()
 private const val SETTINGS_FILE = "/lcarsde/status-config.xml"
 
-private val settingsFilePath = when {
+val settingsFilePath = when {
     doUserSettingsExist() -> "${userConfigPath}$SETTINGS_FILE"
     else -> "/etc$SETTINGS_FILE"
 }
@@ -20,7 +20,7 @@ private fun doUserSettingsExist(): Boolean {
     return access("${userConfigPath}$SETTINGS_FILE", F_OK) != -1
 }
 
-fun readConfiguration(): Set<WidgetConfiguration> {
+fun readConfiguration(settingsFilePath: String): Set<WidgetConfiguration> {
     val document = xmlReadFile(settingsFilePath, null, 0)
             ?: return emptySet()
 

@@ -1,6 +1,5 @@
-package de.atennert.lcarsde.statusbar
+package de.atennert.lcarsde.statusbar.widgets
 
-import de.atennert.lcarsde.statusbar.widgets.StatusFillerWidget
 import kotlinx.coroutines.*
 import kotlin.random.Random
 

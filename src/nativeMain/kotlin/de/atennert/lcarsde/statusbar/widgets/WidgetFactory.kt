@@ -4,6 +4,9 @@ import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
 import kotlinx.cinterop.CPointer
 import statusbar.GtkCssProvider
 
+/**
+ * Used to create a widget based on a configuration entry.
+ */
 class WidgetFactory(private val cssProvider: CPointer<GtkCssProvider>) {
 
     fun createWidget(configuration: WidgetConfiguration): StatusWidget? = when (configuration.name) {
@@ -17,7 +20,7 @@ class WidgetFactory(private val cssProvider: CPointer<GtkCssProvider>) {
         "LcarsdeWifiStatus"         -> WifiWidget(configuration, cssProvider)
         "LcarsdeEthStatus"          -> EthernetWidget(configuration, cssProvider)
         "LcarsdeStatusAudio"        -> AudioWidget(configuration, cssProvider)
-        "LcarsdeStatusMemory" -> MemoryWidget(configuration, cssProvider)
+        "LcarsdeStatusMemory"       -> MemoryWidget(configuration, cssProvider)
         else -> null
     }
 }
