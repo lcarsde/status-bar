@@ -1,8 +1,8 @@
 plugins {
-    kotlin("multiplatform") version "1.4.21"
+    kotlin("multiplatform") version "1.5.0"
 }
 group = "de.atennert"
-version = "21.0"
+version = "21.3"
 
 repositories {
     mavenCentral()
@@ -26,7 +26,12 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.2")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.3")
+            }
+        }
+        commonTest {
+            dependencies {
+                implementation( "org.jetbrains.kotlin:kotlin-test-common")
             }
         }
         val nativeMain by getting
