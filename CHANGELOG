@@ -1,3 +1,6 @@
+21.4
+* update kotlin version to 1.5.10
+
 21.3
 * add widget for displaying memory (RAM) status
 * animate filler widgets
