@@ -115,7 +115,7 @@ class AudioWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointe
                     pclose(fp)
                     val data = s.trim().split(";")
                     return Pair(
-                        when (data[1].toLowerCase()) {
+                        when (data[1].lowercase()) {
                             "yes" -> true
                             "1" -> true
                             else -> false

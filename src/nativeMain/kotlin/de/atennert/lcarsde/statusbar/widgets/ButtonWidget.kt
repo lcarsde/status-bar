@@ -13,7 +13,7 @@ class ButtonWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPoint
     private var ref: StableRef<ButtonWidget>? = null
 
     init {
-        widget = gtk_button_new_with_label(properties["text"]?.toUpperCase())!!
+        widget = gtk_button_new_with_label(properties["text"]?.uppercase())!!
         gtk_widget_set_size_request(widget, widthPx, heightPx)
         val label = gtk_container_get_children(widget.reinterpret())?.pointed?.data!!
         gtk_label_set_xalign(label.reinterpret(), 1f)
