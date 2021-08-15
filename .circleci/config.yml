@@ -1,0 +1,106 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+jobs:
+  test:
+    docker:
+      # specify the version you desire here
+      - image: cimg/openjdk:8.0.292
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # - image: circleci/postgres:9.4
+
+    working_directory: ~/repo
+
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+
+    steps:
+      - checkout
+
+      # install dependencies
+      - run: sudo apt-get update
+      - run: sudo apt-get install -y openjdk-8-jdk-headless libx11-dev libgtk-3-dev libxml2-dev libtinfo5
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "build.gradle.kts" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: gradle dependencies
+
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle.kts" }}
+
+      # run tests! https://youtrack.jetbrains.com/issue/KT-32608
+      - run: gradle nativeTest
+
+      - store_test_results:
+          path: build/test-results
+
+      - run: gradle build
+
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - build/*
+
+  deploy_aur:
+    docker:
+      - image: atennert/archlinux-cci-aur:0.0.3
+        auth:
+          username: atennert
+          password: $DOCKERHUB_PASSWORD
+
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - 78:cd:db:a2:c1:cb:65:7a:16:75:b9:ec:08:7b:62:c3
+
+      # get deployment files for lcarsde-status-bar
+      - run: git clone ssh://aur@aur.archlinux.org/lcarsde-status-bar.git
+
+      # log the current contents
+      - run: cat lcarsde-status-bar/PKGBUILD
+      - run: cat lcarsde-status-bar/.SRCINFO
+
+      # update content
+      - run: cd lcarsde-status-bar && sed -i -e "s/^pkgver=[0-9\.]*$/pkgver=$CIRCLE_TAG/" PKGBUILD
+      - run: cd lcarsde-status-bar && updpkgsums
+      - run: cd lcarsde-status-bar && makepkg --printsrcinfo > .SRCINFO
+
+      # log the new contents
+      - run: cat lcarsde-status-bar/PKGBUILD
+      - run: cat lcarsde-status-bar/.SRCINFO
+
+      # upload new contents
+      - run: cd lcarsde-status-bar && git add -u && git commit -m "update to version $CIRCLE_TAG" && git push
+
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - test:
+          filters:
+            tags:
+              only: /.*/
+      - deploy_aur:
+          context:
+            - lcarsde-context
+          requires:
+            - test
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
