@@ -1,0 +1,14 @@
+Source: status-bar
+Maintainer: Andreas Tennert <lcarsde@andreas-tennert.de>
+Section: misc
+Priority: optional
+Standards-Version: 4.5.0
+Build-Depends: debhelper (>= 9), default-jdk-headless | default-jdk, libx11-dev, libgtk-3-dev, libxml2-dev, libtinfo5
+
+Package: status-bar
+Architecture: any
+Depends: libx11-6, libgtk-3-0, libxml2
+Recommends: fonts-ubuntu, pulseaudio
+Provides: status-bar
+Description: Status bar for LCARSDE
+ https://lcarsde.github.io
