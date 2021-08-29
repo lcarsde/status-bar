@@ -68,6 +68,7 @@ jobs:
 
       # update content
       - run: cd lcarsde-status-bar && sed -i -e "s/^pkgver=[0-9\.]*$/pkgver=$CIRCLE_TAG/" PKGBUILD
+      - run: cd lcarsde-status-bar && sed -i -e "s/^pkgrel=[0-9]*$/pkgrel=1/" PKGBUILD
       - run: cd lcarsde-status-bar && updpkgsums
       - run: cd lcarsde-status-bar && makepkg --printsrcinfo > .SRCINFO
 
@@ -120,7 +121,7 @@ jobs:
       - attach_workspace:
           at: ~/repo
 
-      - run: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} 21.3 ~/repo/build/deb/deploy/
+      - run: ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ~/repo/build/deb/deploy/
 
 workflows:
   version: 2
@@ -145,18 +146,18 @@ workflows:
             - lcarsde-context
           requires:
             - test
-#          filters:
-#            tags:
-#              only: /.*/
-#            branches:
-#              ignore: /.*/
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
       - publish_github_release:
           context:
             - lcarsde-context
           requires:
             - deploy_ubuntu
-#          filters:
-#            tags:
-#              only: /.*/
-#            branches:
-#              ignore: /.*/
+          filters:
+            tags:
+              only: /.*/
+            branches:
+              ignore: /.*/
