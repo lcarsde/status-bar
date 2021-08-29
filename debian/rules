@@ -30,9 +30,9 @@ install: build
 	dh_prep
 	dh_installdirs
 
-	mkdir -p "debian/status-bar/usr/bin"
 	cp -r "build/processedResources/native/main/usr" "debian/status-bar/usr"
 	cp -r "build/processedResources/native/main/etc" "debian/status-bar/etc"
+	mkdir -p "debian/status-bar/usr/bin"
 	cp "build/bin/native/releaseExecutable/status-bar.kexe" "debian/status-bar/usr/bin/"
 
 	mkdir -p "debian/status-bar/usr/share/doc/status-bar"
