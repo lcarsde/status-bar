@@ -138,7 +138,7 @@ jobs:
       - run: git clone git@github.com:lcarsde/lcarsde.github.io.git
 
       # update content
-      - run: sed -i -e 's/[0-9\.]*\/status-bar_[0-9\.]*_amd64.deb">status-bar ([0-9\.]*)/$CIRCLE_TAG\/status-bar_$CIRCLE_TAG_amd64.deb">status-bar ($CIRCLE_TAG)/' installation.html
+      - run: sed -i -e "s/[0-9\.]*\/status-bar_[0-9\.]*_amd64.deb\">status-bar ([0-9\.]*)/$CIRCLE_TAG\/status-bar_$CIRCLE_TAG_amd64.deb\">status-bar ($CIRCLE_TAG)/" installation.html
 
       # upload new contents
       - run: git add -u && git commit -m "update status-bar deb file link to version $CIRCLE_TAG" && git push
