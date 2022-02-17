@@ -61,6 +61,8 @@ jobs:
 
       # get deployment files for lcarsde-status-bar
       - run: git clone ssh://aur@aur.archlinux.org/lcarsde-status-bar.git
+      - run: cd lcarsde-status-bar && git config user.email "$AUR_GIT_EMAIL"
+      - run: cd lcarsde-status-bar && git config user.name "$AUR_GIT_NAME"
 
       # log the current contents
       - run: cat lcarsde-status-bar/PKGBUILD
