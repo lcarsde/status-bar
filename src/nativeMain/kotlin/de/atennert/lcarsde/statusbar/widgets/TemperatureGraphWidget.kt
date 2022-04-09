@@ -21,6 +21,8 @@ import kotlin.collections.sortedBy
 class TemperatureGraphWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>)
     : RadarGraphWidget(widgetConfiguration, cssProvider, 5000, 125) {
 
+    private val tempRegex = Regex("^\\d+$")
+
     private val attentionTemp = 60
     private val warningTemp = 80
 
@@ -30,8 +32,8 @@ class TemperatureGraphWidget(widgetConfiguration: WidgetConfiguration, cssProvid
                 .map { it.value }
 
         val maxTemp = temperatures.maxOrNull() ?: return
-        var angle = 0.0
         val points = ArrayList<Pair<Double, Double>>(temperatures.size)
+        var angle = 0.0
         for (temp in temperatures) {
             points.add(polarToCartesian(this, temp * scale, angle))
             angle += 360 / temperatures.size
@@ -54,19 +56,36 @@ class TemperatureGraphWidget(widgetConfiguration: WidgetConfiguration, cssProvid
     private fun getTemperatures(): Map<String, Int> {
         val basePath = "/sys/class/thermal"
         val temperatures = HashMap<String, Int>()
+        var unknownIndex = 0
 
-        opendir(basePath)?.let { dir ->
-            while (true) {
-                val subDir = readdir(dir)?.pointed?.d_name?.toKString() ?: break
+        try {
+            opendir(basePath)?.let { dir ->
+                while (true) {
+                    val subDir = readdir(dir)?.pointed?.d_name?.toKString() ?: break
 
-                if (subDir.startsWith("thermal_zone")) {
-                    val type = readFile("$basePath/$subDir/type") ?: continue
-                    val temp = readFile("$basePath/$subDir/temp")?.toInt() ?: continue
+                    if (!subDir.startsWith("thermal_zone")) {
+                        continue
+                    }
 
-                    temperatures[type] = temp / 1000
+                    try {
+                        val type = readFile("$basePath/$subDir/type")
+                            ?.let { it.ifEmpty { "unknown${unknownIndex++}" } }
+                            ?: continue
+
+                        val temp = readFile("$basePath/$subDir/temp")
+                            ?.let { if (it.matches(tempRegex)) it else null }
+                            ?.toInt()
+                            ?: continue
+
+                        temperatures[type] = temp / 1000
+                    } catch (e: Throwable) {
+                        println("Unable to read values from $subDir: ${e.message}")
+                    }
                 }
+                closedir(dir)
             }
-            closedir(dir)
+        } catch (e: Throwable) {
+            println("Unable to read temperatures: ${e.message}")
         }
 
         return temperatures
