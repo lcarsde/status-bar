@@ -9,43 +9,20 @@ import platform.posix.closedir
 import platform.posix.opendir
 import platform.posix.readdir
 import statusbar.GtkCssProvider
-import statusbar.cairo_t
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.Map
-import kotlin.collections.map
-import kotlin.collections.maxOrNull
 import kotlin.collections.set
-import kotlin.collections.sortedBy
 
 class TemperatureGraphWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>)
     : RadarGraphWidget(widgetConfiguration, cssProvider, 5000, 125) {
 
     private val tempRegex = Regex("^\\d+$")
 
-    private val attentionTemp = 60
-    private val warningTemp = 80
+    override val attentionValue = 60.0
+    override val warningValue = 80.0
 
-    override fun drawData(context: CPointer<cairo_t>) {
-        val temperatures = getTemperatures().entries
-                .sortedBy { it.key }
-                .map { it.value }
-
-        val maxTemp = temperatures.maxOrNull() ?: return
-        val points = ArrayList<Pair<Double, Double>>(temperatures.size)
-        var angle = 0.0
-        for (temp in temperatures) {
-            points.add(polarToCartesian(this, temp * scale, angle))
-            angle += 360 / temperatures.size
-        }
-
-        when {
-            maxTemp > warningTemp -> setDoubleRgb(context, 0.8, 0.4, 0.4)
-            maxTemp > attentionTemp -> setDoubleRgb(context, 1.0, 0.6, 0.0)
-            else -> setDoubleRgb(context, 1.0, 0.8, 0.6)
-        }
-
-        drawPoints(context, points)
+    override fun getData(): List<Double> {
+        return getTemperatures().entries
+            .sortedBy { it.key }
+            .map { it.value.toDouble() }
     }
 
     /**

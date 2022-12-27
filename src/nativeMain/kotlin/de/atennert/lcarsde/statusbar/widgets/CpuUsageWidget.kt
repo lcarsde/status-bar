@@ -4,35 +4,16 @@ import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
 import de.atennert.lcarsde.statusbar.readFile
 import kotlinx.cinterop.CPointer
 import statusbar.GtkCssProvider
-import statusbar.cairo_t
 
 class CpuUsageWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>) :
     RadarGraphWidget(widgetConfiguration, cssProvider, 500, 100) {
 
-    private val attentionFreq = 60
-    private val warningFreq = 80
+    override val attentionValue = 60.0
+    override val warningValue = 80.0
 
     private var lastIdlesTotals: List<Pair<Float, Float>> = emptyList()
 
-    override fun drawData(context: CPointer<cairo_t>) {
-        val frequencies = getCpuUtilization()
-
-        val maxFreq = frequencies.maxOrNull() ?: return
-        val points = ArrayList<Pair<Double, Double>>(frequencies.size)
-        var angle = 0.0
-        for (freq in frequencies) {
-            points.add(polarToCartesian(this, freq * scale, angle))
-            angle += 360 / frequencies.size
-        }
-
-        when {
-            maxFreq > warningFreq -> setDoubleRgb(context, 0.8, 0.4, 0.4)
-            maxFreq > attentionFreq -> setDoubleRgb(context, 1.0, 0.6, 0.0)
-            else -> setDoubleRgb(context, 1.0, 0.8, 0.6)
-        }
-
-        drawPoints(context, points)
-    }
+    override fun getData(): List<Double> = getCpuUtilization()
 
     private fun getCpuUtilization(): List<Double> {
         val statData = readFile("/proc/stat")?.lines() ?: return emptyList()

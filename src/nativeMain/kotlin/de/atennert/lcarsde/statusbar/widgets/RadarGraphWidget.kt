@@ -18,8 +18,11 @@ abstract class RadarGraphWidget(widgetConfiguration: WidgetConfiguration,
     protected val cx = widthPx.toDouble() / 2
     protected val cy = heightPx.toDouble() / 2
     protected val minDimension = min(cx, cy)
-    protected val scale = minDimension / maxScale
+    private val scale = minDimension / maxScale
     protected val scaledMax = maxScale * scale
+
+    protected abstract val attentionValue: Double
+    protected abstract val warningValue: Double
 
     private var ref: StableRef<RadarGraphWidget>? = null
 
@@ -48,14 +51,38 @@ abstract class RadarGraphWidget(widgetConfiguration: WidgetConfiguration,
         gtk_widget_queue_draw(widget)
     }
 
-    abstract fun drawData(context: CPointer<cairo_t>)
+    abstract fun getData(): List<Double>
 
-    protected fun setDoubleRgb(context: CPointer<cairo_t>, r: Double, g: Double, b: Double) {
+    fun drawData(context: CPointer<cairo_t>) {
+        val values = getData()
+
+        val maxFreq = values.maxOrNull() ?: return
+        val points = ArrayList<Pair<Double, Double>>(values.size)
+        var angle = 0.0
+        for (value in values) {
+            points.add(polarToCartesian(this, value * scale, angle))
+            angle += 360 / values.size
+        }
+
+        setColor(maxFreq, context)
+
+        drawPoints(context, points)
+    }
+
+    private fun setColor(maxValue: Double, context: CPointer<cairo_t>) {
+        when {
+            maxValue > warningValue -> setDoubleRgb(context, 0.8, 0.4, 0.4)
+            maxValue > attentionValue -> setDoubleRgb(context, 1.0, 0.6, 0.0)
+            else -> setDoubleRgb(context, 1.0, 0.8, 0.6)
+        }
+    }
+
+    private fun setDoubleRgb(context: CPointer<cairo_t>, r: Double, g: Double, b: Double) {
         cairo_set_source_rgb(context, r, g, b)
         cairo_set_source_rgba(context, r, g, b, 0.6)
     }
 
-    protected fun drawPoints(context: CPointer<cairo_t>, points: List<Pair<Double, Double>>) {
+    private fun drawPoints(context: CPointer<cairo_t>, points: List<Pair<Double, Double>>) {
         val (x1, y1) = points[0]
         cairo_move_to(context, x1, y1)
         for (i in 1 until points.size) {
