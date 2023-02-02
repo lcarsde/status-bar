@@ -9,7 +9,7 @@ fun readFile(path: String): String? {
         var s = ""
         val buf = ByteArray(1000)
         buf.usePinned {
-            while (platform.posix.fgets(it.addressOf(0), 1000, fp) != null) {
+            while (platform.posix.fgets(it.addressOf(0), buf.size, fp) != null) {
                 s += it.get().toKString()
             }
         }
