@@ -1,5 +1,8 @@
-22.3
-* update kotlin version to 1.6.20
+23.1
+* update kotlin version to 1.8.10
+* update deb build to Ubuntu 22.04
+* remove duplicated radar code
+* fix audio status script
 
 22.2
 * fix potential errors when reading temperatures
