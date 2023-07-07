@@ -3,6 +3,7 @@ package de.atennert.lcarsde.statusbar.widgets
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
 import de.atennert.lcarsde.statusbar.readFile
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.pointed
 import kotlinx.cinterop.toKString
 import platform.posix.closedir
@@ -11,6 +12,7 @@ import platform.posix.readdir
 import statusbar.GtkCssProvider
 import kotlin.collections.set
 
+@ExperimentalForeignApi
 class TemperatureGraphWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>)
     : RadarGraphWidget(widgetConfiguration, cssProvider, 5000, 125) {
 

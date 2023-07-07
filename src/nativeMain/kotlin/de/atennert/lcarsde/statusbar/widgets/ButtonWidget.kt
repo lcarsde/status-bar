@@ -7,6 +7,7 @@ import de.atennert.lcarsde.statusbar.extensions.setStyling
 import kotlinx.cinterop.*
 import statusbar.*
 
+@ExperimentalForeignApi
 class ButtonWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>)
     : StatusWidget(widgetConfiguration, cssProvider, null) {
 

@@ -8,18 +8,22 @@ import platform.posix.access
 import platform.posix.getenv
 import statusbar.*
 
+@ExperimentalForeignApi
 private val userConfigPath = getenv("XDG_CONFIG_HOME")?.toKString()
 private const val SETTINGS_FILE = "/lcarsde/status-config.xml"
 
+@ExperimentalForeignApi
 val settingsFilePath = when {
     doUserSettingsExist() -> "${userConfigPath}$SETTINGS_FILE"
     else -> "/etc$SETTINGS_FILE"
 }
 
+@ExperimentalForeignApi
 private fun doUserSettingsExist(): Boolean {
     return access("${userConfigPath}$SETTINGS_FILE", F_OK) != -1
 }
 
+@ExperimentalForeignApi
 fun readConfiguration(settingsFilePath: String): Set<WidgetConfiguration> {
     val document = xmlReadFile(settingsFilePath, null, 0)
             ?: return emptySet()
@@ -40,12 +44,18 @@ fun readConfiguration(settingsFilePath: String): Set<WidgetConfiguration> {
     return widgetConfigs
 }
 
+@ExperimentalForeignApi
 private val namePtr = "name".toUByteArray().toCValues()
+@ExperimentalForeignApi
 private val xPtr = "x".toUByteArray().toCValues()
+@ExperimentalForeignApi
 private val yPtr = "y".toUByteArray().toCValues()
+@ExperimentalForeignApi
 private val widthPtr = "width".toUByteArray().toCValues()
+@ExperimentalForeignApi
 private val heightPtr = "height".toUByteArray().toCValues()
 
+@ExperimentalForeignApi
 private fun readWidgetConfig(node: _xmlNode): WidgetConfiguration? {
     val name = xmlGetProp(node.ptr, namePtr)?.toKString() ?: return null
     var x: Int? = null
@@ -75,9 +85,12 @@ private fun readWidgetConfig(node: _xmlNode): WidgetConfiguration? {
             .withProperties(properties)
 }
 
+@ExperimentalForeignApi
 private val keyPtr = "key".toUByteArray().toCValues()
+@ExperimentalForeignApi
 private val valuePtr = "value".toUByteArray().toCValues()
 
+@ExperimentalForeignApi
 private fun readProperties(propertiesNode: _xmlNode): Map<String, String> {
     val properties = HashMap<String, String>()
 

@@ -9,6 +9,7 @@ import kotlin.math.cos
 import kotlin.math.min
 import kotlin.math.sin
 
+@ExperimentalForeignApi
 abstract class RadarGraphWidget(widgetConfiguration: WidgetConfiguration,
                                 cssProvider: CPointer<GtkCssProvider>,
                                 updateDelayMs: Long?,

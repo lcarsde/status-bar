@@ -1,9 +1,11 @@
 package de.atennert.lcarsde.statusbar
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.addressOf
 import kotlinx.cinterop.toKString
 import kotlinx.cinterop.usePinned
 
+@ExperimentalForeignApi
 fun readFile(path: String): String? {
     platform.posix.fopen(path, "r")?. let { fp ->
         var s = ""

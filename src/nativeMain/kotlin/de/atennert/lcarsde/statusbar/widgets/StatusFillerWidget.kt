@@ -7,6 +7,7 @@ import statusbar.*
 import kotlin.math.PI
 import kotlin.random.Random
 
+@ExperimentalForeignApi
 class StatusFillerWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>)
     : StatusWidget(widgetConfiguration, cssProvider, null) {
 

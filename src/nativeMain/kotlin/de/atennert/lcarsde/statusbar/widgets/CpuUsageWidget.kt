@@ -3,8 +3,10 @@ package de.atennert.lcarsde.statusbar.widgets
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
 import de.atennert.lcarsde.statusbar.readFile
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.ExperimentalForeignApi
 import statusbar.GtkCssProvider
 
+@ExperimentalForeignApi
 class CpuUsageWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>) :
     RadarGraphWidget(widgetConfiguration, cssProvider, 500, 100) {
 

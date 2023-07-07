@@ -9,6 +9,7 @@ import de.atennert.lcarsde.statusbar.widgets.*
 import kotlinx.cinterop.*
 import statusbar.*
 
+@ExperimentalForeignApi
 class StatusBar {
     val window: CPointer<GtkWidget>
 

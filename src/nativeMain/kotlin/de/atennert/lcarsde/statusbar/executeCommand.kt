@@ -3,6 +3,7 @@ package de.atennert.lcarsde.statusbar
 import kotlinx.cinterop.*
 import statusbar.*
 
+@ExperimentalForeignApi
 fun executeCommand(command: String) {
     val commandParts = command.split(' ')
 

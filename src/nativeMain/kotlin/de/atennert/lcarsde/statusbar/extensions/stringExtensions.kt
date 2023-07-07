@@ -9,6 +9,7 @@ fun String.toUByteArray(): UByteArray {
 }
 
 /** convert this ubyte array pointer to a string */
+@ExperimentalForeignApi
 fun CPointer<UByteVar>.toKString(): String {
     val byteString = mutableListOf<Byte>()
     var i = 0
@@ -26,6 +27,7 @@ fun CPointer<UByteVar>.toKString(): String {
 }
 
 /** convert this ubyte array pointer to a string */
+@ExperimentalForeignApi
 fun CPointer<UByteVar>?.toKString(): String = this?.toKString() ?: ""
 
 /** print a float with a certain amount of places */

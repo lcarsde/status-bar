@@ -3,8 +3,10 @@ package de.atennert.lcarsde.statusbar.widgets
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
 import de.atennert.lcarsde.statusbar.extensions.print
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.ExperimentalForeignApi
 import statusbar.*
 
+@ExperimentalForeignApi
 class StardateWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>)
     : TextWidget(widgetConfiguration, cssProvider, 10000) {
 

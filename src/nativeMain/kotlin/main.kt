@@ -1,5 +1,6 @@
 import de.atennert.lcarsde.statusbar.StatusBar
 import de.atennert.lcarsde.statusbar.extensions.gSignalConnect
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.cinterop.cValue
 import kotlinx.cinterop.cValuesOf
 import kotlinx.cinterop.staticCFunction
@@ -12,6 +13,7 @@ import statusbar.gtk_widget_show_all
 
 var stop = false
 
+@ExperimentalForeignApi
 fun main() = runBlocking {
     gtk_init(cValuesOf(0), cValue())
 

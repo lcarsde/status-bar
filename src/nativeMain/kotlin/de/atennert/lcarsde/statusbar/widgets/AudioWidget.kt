@@ -8,6 +8,7 @@ import de.atennert.lcarsde.statusbar.extensions.gSignalConnect
 import kotlinx.cinterop.*
 import statusbar.*
 
+@ExperimentalForeignApi
 class AudioWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>) :
     StatusWidget(widgetConfiguration, cssProvider, 300) {
 
@@ -35,10 +36,10 @@ class AudioWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointe
         gSignalConnect(raiseButton.second, "draw",
             staticCFunction { _: CPointer<GtkWidget>, c: CPointer<cairo_t> -> drawRaise(c) })
 
-        gtk_box_pack_start(widget.reinterpret(), lowerButton.first, FALSE, FALSE, 0)
-        gtk_box_pack_start(widget.reinterpret(), muteButton.first, FALSE, FALSE, 0)
-        gtk_box_pack_start(widget.reinterpret(), volumeDrawArea, FALSE, FALSE, 0)
-        gtk_box_pack_start(widget.reinterpret(), raiseButton.first, FALSE, FALSE, 0)
+        gtk_box_pack_start(widget.reinterpret(), lowerButton.first, FALSE, FALSE, 0.convert())
+        gtk_box_pack_start(widget.reinterpret(), muteButton.first, FALSE, FALSE, 0.convert())
+        gtk_box_pack_start(widget.reinterpret(), volumeDrawArea, FALSE, FALSE, 0.convert())
+        gtk_box_pack_start(widget.reinterpret(), raiseButton.first, FALSE, FALSE, 0.convert())
 
         gtk_widget_set_size_request(widget, widthPx, heightPx)
     }
@@ -52,7 +53,7 @@ class AudioWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointe
         for (cls in styleClasses) {
             gtk_style_context_add_class(styleContext, cls)
         }
-        gtk_style_context_add_provider(styleContext, cssProvider.reinterpret(), GTK_STYLE_PROVIDER_PRIORITY_USER)
+        gtk_style_context_add_provider(styleContext, cssProvider.reinterpret(), GTK_STYLE_PROVIDER_PRIORITY_USER.convert())
 
         val iconArea = gtk_drawing_area_new()!!
         gtk_widget_set_size_request(iconArea, CELL_SIZE, CELL_SIZE)

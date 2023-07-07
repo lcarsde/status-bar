@@ -7,6 +7,7 @@ import kotlinx.cinterop.*
 import statusbar.*
 import kotlin.math.max
 
+@ExperimentalForeignApi
 class BatteryWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>)
     : StatusWidget(widgetConfiguration, cssProvider, 5000) {
 

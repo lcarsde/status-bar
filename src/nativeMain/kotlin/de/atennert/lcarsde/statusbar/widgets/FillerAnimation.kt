@@ -1,11 +1,13 @@
 package de.atennert.lcarsde.statusbar.widgets
 
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.*
 import kotlin.random.Random
 
 /**
  * Controls the update/animation lifecycle for all filler widgets.
  */
+@ExperimentalForeignApi
 class FillerAnimation {
 
     private val fillerWidgets = mutableListOf<StatusFillerWidget>()

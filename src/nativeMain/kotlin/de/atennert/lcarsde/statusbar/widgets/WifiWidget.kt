@@ -7,6 +7,7 @@ import kotlinx.cinterop.*
 import statusbar.*
 import kotlin.math.PI
 
+@ExperimentalForeignApi
 class WifiWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>) :
     StatusWidget(widgetConfiguration, cssProvider, 1000) {
 

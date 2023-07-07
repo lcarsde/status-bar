@@ -12,6 +12,7 @@ import statusbar.*
  *
  * To use: extend this class and override the create_text method.
  */
+@ExperimentalForeignApi
 abstract class TextWidget(widgetConfiguration: WidgetConfiguration, cssProvider: CPointer<GtkCssProvider>, updateDelayMs: Long)
     : StatusWidget(widgetConfiguration, cssProvider, updateDelayMs) {
 

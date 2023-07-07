@@ -4,6 +4,7 @@ import de.atennert.lcarsde.statusbar.CELL_SIZE
 import de.atennert.lcarsde.statusbar.GAP_SIZE
 import de.atennert.lcarsde.statusbar.configuration.WidgetConfiguration
 import kotlinx.cinterop.CPointer
+import kotlinx.cinterop.ExperimentalForeignApi
 import kotlinx.coroutines.*
 import statusbar.GtkCssProvider
 import statusbar.GtkWidget
@@ -15,6 +16,7 @@ import statusbar.GtkWidget
  * @param cssProvider The CSS provider for styling all parts of the widget
  * @param updateDelayMs The update delay for the update job. If this is null, no update job is started.
  */
+@ExperimentalForeignApi
 abstract class StatusWidget(private val widgetConfiguration: WidgetConfiguration,
                             protected val cssProvider: CPointer<GtkCssProvider>,
                             private val updateDelayMs: Long?) {
