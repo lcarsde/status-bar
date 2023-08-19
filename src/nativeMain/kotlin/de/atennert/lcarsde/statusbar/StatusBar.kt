@@ -6,6 +6,7 @@ import de.atennert.lcarsde.statusbar.configuration.settingsFilePath
 import de.atennert.lcarsde.statusbar.extensions.gSignalConnect
 import de.atennert.lcarsde.statusbar.extensions.setStyling
 import de.atennert.lcarsde.statusbar.widgets.*
+import kotlin.native.concurrent.ThreadLocal
 import kotlinx.cinterop.*
 import statusbar.*
 

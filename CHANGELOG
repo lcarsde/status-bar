@@ -1,6 +1,7 @@
 23.2
 * update kotlin version to 1.9.0
 * enable builds for arm64
+* update coroutines to 1.7.3
 
 23.1
 * update kotlin version to 1.8.10
